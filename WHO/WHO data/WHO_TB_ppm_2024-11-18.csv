@@ -1,0 +1,425 @@
+"country","iso2","iso3","iso_numeric","g_whoregion","year","priv_new_dx","pub_new_dx"
+"Afghanistan","AF","AFG","004","EMR",2010,430,840
+"Afghanistan","AF","AFG","004","EMR",2011,819,825
+"Afghanistan","AF","AFG","004","EMR",2012,2128,1362
+"Afghanistan","AF","AFG","004","EMR",2013,2972,2753
+"Afghanistan","AF","AFG","004","EMR",2014,2826,366
+"Afghanistan","AF","AFG","004","EMR",2015,771,1523
+"Afghanistan","AF","AFG","004","EMR",2016,1175,10644
+"Afghanistan","AF","AFG","004","EMR",2017,2410,0
+"Afghanistan","AF","AFG","004","EMR",2018,3715,2044
+"Afghanistan","AF","AFG","004","EMR",2019,4276,
+"Afghanistan","AF","AFG","004","EMR",2020,4843,
+"Afghanistan","AF","AFG","004","EMR",2021,6007,
+"Afghanistan","AF","AFG","004","EMR",2022,5886,5886
+"Afghanistan","AF","AFG","004","EMR",2023,5323,1087
+"Angola","AO","AGO","024","AFR",2010,3829,11847
+"Angola","AO","AGO","024","AFR",2011,4379,9610
+"Angola","AO","AGO","024","AFR",2012,1673,142
+"Angola","AO","AGO","024","AFR",2013,2601,411
+"Angola","AO","AGO","024","AFR",2014,2713,0
+"Angola","AO","AGO","024","AFR",2015,2146,215
+"Angola","AO","AGO","024","AFR",2016,2361,58699
+"Angola","AO","AGO","024","AFR",2017,1723,1449
+"Angola","AO","AGO","024","AFR",2018,5926,694
+"Angola","AO","AGO","024","AFR",2019,8279,803
+"Angola","AO","AGO","024","AFR",2020,1886,
+"Angola","AO","AGO","024","AFR",2023,2360,608
+"Bangladesh","BD","BGD","050","SEA",2010,17844,2567
+"Bangladesh","BD","BGD","050","SEA",2011,17433,2235
+"Bangladesh","BD","BGD","050","SEA",2012,14934,2429
+"Bangladesh","BD","BGD","050","SEA",2013,20719,2427
+"Bangladesh","BD","BGD","050","SEA",2014,22960,2419
+"Bangladesh","BD","BGD","050","SEA",2015,60879,40156
+"Bangladesh","BD","BGD","050","SEA",2016,61410,41450
+"Bangladesh","BD","BGD","050","SEA",2017,61537,43228
+"Bangladesh","BD","BGD","050","SEA",2018,68314,49274
+"Bangladesh","BD","BGD","050","SEA",2019,72937,55761
+"Bangladesh","BD","BGD","050","SEA",2020,55102,
+"Bangladesh","BD","BGD","050","SEA",2021,71027,69694
+"Bangladesh","BD","BGD","050","SEA",2022,67583,67598
+"Bangladesh","BD","BGD","050","SEA",2023,64704,75938
+"Cambodia","KH","KHM","116","WPR",2010,851,315
+"Cambodia","KH","KHM","116","WPR",2011,706,15
+"Cambodia","KH","KHM","116","WPR",2012,763,
+"Cambodia","KH","KHM","116","WPR",2013,660,316
+"Cambodia","KH","KHM","116","WPR",2014,465,229
+"Cambodia","KH","KHM","116","WPR",2015,,191
+"Cambodia","KH","KHM","116","WPR",2016,,191
+"Cambodia","KH","KHM","116","WPR",2017,,461
+"Cambodia","KH","KHM","116","WPR",2018,,120
+"Cambodia","KH","KHM","116","WPR",2019,,107
+"Cambodia","KH","KHM","116","WPR",2021,690,
+"Cambodia","KH","KHM","116","WPR",2022,3012,
+"Cambodia","KH","KHM","116","WPR",2023,3154,
+"Democratic Republic of the Congo","CD","COD","180","AFR",2010,,0
+"Democratic Republic of the Congo","CD","COD","180","AFR",2011,114290,
+"Democratic Republic of the Congo","CD","COD","180","AFR",2014,,0
+"Egypt","EG","EGY","818","EMR",2010,315,1797
+"Egypt","EG","EGY","818","EMR",2011,235,1999
+"Egypt","EG","EGY","818","EMR",2012,213,1993
+"Egypt","EG","EGY","818","EMR",2013,213,2000
+"Egypt","EG","EGY","818","EMR",2014,248,1375
+"Egypt","EG","EGY","818","EMR",2015,248,1375
+"Egypt","EG","EGY","818","EMR",2016,158,1451
+"Egypt","EG","EGY","818","EMR",2017,158,1451
+"Egypt","EG","EGY","818","EMR",2018,158,1451
+"Egypt","EG","EGY","818","EMR",2019,158,1451
+"Egypt","EG","EGY","818","EMR",2020,0,
+"Egypt","EG","EGY","818","EMR",2021,106,359
+"Egypt","EG","EGY","818","EMR",2022,0,1207
+"Egypt","EG","EGY","818","EMR",2023,0,1321
+"Eswatini","SZ","SWZ","748","AFR",2010,146,2157
+"Eswatini","SZ","SWZ","748","AFR",2011,16,9
+"Eswatini","SZ","SWZ","748","AFR",2012,841,1489
+"Eswatini","SZ","SWZ","748","AFR",2013,632,1882
+"Eswatini","SZ","SWZ","748","AFR",2014,,206
+"Eswatini","SZ","SWZ","748","AFR",2015,,312
+"Eswatini","SZ","SWZ","748","AFR",2016,1064,367
+"Eswatini","SZ","SWZ","748","AFR",2017,903,323
+"Eswatini","SZ","SWZ","748","AFR",2018,965,375
+"Eswatini","SZ","SWZ","748","AFR",2019,926,1950
+"Eswatini","SZ","SWZ","748","AFR",2020,773,
+"Eswatini","SZ","SWZ","748","AFR",2021,696,1238
+"Eswatini","SZ","SWZ","748","AFR",2022,98,940
+"Eswatini","SZ","SWZ","748","AFR",2023,68,729
+"Ethiopia","ET","ETH","231","AFR",2011,15052,
+"Ethiopia","ET","ETH","231","AFR",2012,17133,0
+"Ethiopia","ET","ETH","231","AFR",2013,18455,0
+"Ethiopia","ET","ETH","231","AFR",2014,16876,0
+"Ethiopia","ET","ETH","231","AFR",2015,15195,
+"Ethiopia","ET","ETH","231","AFR",2016,12372,
+"Ethiopia","ET","ETH","231","AFR",2017,12120,
+"Ethiopia","ET","ETH","231","AFR",2018,12602,
+"Ethiopia","ET","ETH","231","AFR",2019,17225,
+"Ethiopia","ET","ETH","231","AFR",2020,17561,
+"Ethiopia","ET","ETH","231","AFR",2021,17939,
+"Ethiopia","ET","ETH","231","AFR",2022,21398,
+"Ethiopia","ET","ETH","231","AFR",2023,22813,
+"Ghana","GH","GHA","288","AFR",2010,550,1482
+"Ghana","GH","GHA","288","AFR",2011,723,1058
+"Ghana","GH","GHA","288","AFR",2012,832,1107
+"Ghana","GH","GHA","288","AFR",2013,987,1475
+"Ghana","GH","GHA","288","AFR",2014,326,679
+"Ghana","GH","GHA","288","AFR",2015,268,342
+"Ghana","GH","GHA","288","AFR",2016,1004,238
+"Ghana","GH","GHA","288","AFR",2017,1455,876
+"Ghana","GH","GHA","288","AFR",2018,1965,759
+"Ghana","GH","GHA","288","AFR",2019,2940,1603
+"Ghana","GH","GHA","288","AFR",2020,2611,
+"Ghana","GH","GHA","288","AFR",2021,3063,1036
+"Ghana","GH","GHA","288","AFR",2022,3096,2060
+"Ghana","GH","GHA","288","AFR",2023,5807,2917
+"India","IN","IND","356","SEA",2010,35025,
+"India","IN","IND","356","SEA",2011,3970,10021
+"India","IN","IND","356","SEA",2012,3533,13572
+"India","IN","IND","356","SEA",2013,85439,199564
+"India","IN","IND","356","SEA",2014,194992,189857
+"India","IN","IND","356","SEA",2015,184802,284636
+"India","IN","IND","356","SEA",2016,330186,231765
+"India","IN","IND","356","SEA",2017,400113,201369
+"India","IN","IND","356","SEA",2018,542527,187485
+"India","IN","IND","356","SEA",2019,678895,310902
+"India","IN","IND","356","SEA",2020,559923,
+"India","IN","IND","356","SEA",2021,693660,54428
+"India","IN","IND","356","SEA",2022,809484,60220
+"India","IN","IND","356","SEA",2023,933494,65136
+"Indonesia","ID","IDN","360","SEA",2010,1310,47081
+"Indonesia","ID","IDN","360","SEA",2011,4890,66564
+"Indonesia","ID","IDN","360","SEA",2012,5432,77376
+"Indonesia","ID","IDN","360","SEA",2013,26345,67168
+"Indonesia","ID","IDN","360","SEA",2014,28186,57586
+"Indonesia","ID","IDN","360","SEA",2015,30550,61183
+"Indonesia","ID","IDN","360","SEA",2016,37805,71064
+"Indonesia","ID","IDN","360","SEA",2017,58633,108040
+"Indonesia","ID","IDN","360","SEA",2018,101839,166298
+"Indonesia","ID","IDN","360","SEA",2019,109216,121512
+"Indonesia","ID","IDN","360","SEA",2020,74547,
+"Indonesia","ID","IDN","360","SEA",2021,98309,115006
+"Indonesia","ID","IDN","360","SEA",2022,198825,211433
+"Indonesia","ID","IDN","360","SEA",2023,251940,252441
+"Iran (Islamic Republic of)","IR","IRN","364","EMR",2010,2874,1397
+"Iran (Islamic Republic of)","IR","IRN","364","EMR",2011,2982,7613
+"Iran (Islamic Republic of)","IR","IRN","364","EMR",2012,3090,7615
+"Iran (Islamic Republic of)","IR","IRN","364","EMR",2013,3282,7770
+"Iran (Islamic Republic of)","IR","IRN","364","EMR",2014,3093,1107
+"Iran (Islamic Republic of)","IR","IRN","364","EMR",2015,3019,7196
+"Iran (Islamic Republic of)","IR","IRN","364","EMR",2016,2598,6654
+"Iran (Islamic Republic of)","IR","IRN","364","EMR",2017,2380,6671
+"Iran (Islamic Republic of)","IR","IRN","364","EMR",2018,2316,6590
+"Iran (Islamic Republic of)","IR","IRN","364","EMR",2019,2063,6461
+"Iran (Islamic Republic of)","IR","IRN","364","EMR",2020,1818,
+"Iran (Islamic Republic of)","IR","IRN","364","EMR",2021,2112,4087
+"Iran (Islamic Republic of)","IR","IRN","364","EMR",2022,2483,4778
+"Iran (Islamic Republic of)","IR","IRN","364","EMR",2023,2274,5151
+"Iraq","IQ","IRQ","368","EMR",2010,814,860
+"Iraq","IQ","IRQ","368","EMR",2011,3154,2470
+"Iraq","IQ","IRQ","368","EMR",2012,2938,2693
+"Iraq","IQ","IRQ","368","EMR",2013,3464,5090
+"Iraq","IQ","IRQ","368","EMR",2014,3803,2748
+"Iraq","IQ","IRQ","368","EMR",2015,3945,2438
+"Iraq","IQ","IRQ","368","EMR",2016,3756,2407
+"Iraq","IQ","IRQ","368","EMR",2017,4082,2431
+"Iraq","IQ","IRQ","368","EMR",2018,3714,2523
+"Iraq","IQ","IRQ","368","EMR",2019,3111,2673
+"Iraq","IQ","IRQ","368","EMR",2020,2281,
+"Iraq","IQ","IRQ","368","EMR",2021,2281,2712
+"Iraq","IQ","IRQ","368","EMR",2022,2830,2238
+"Iraq","IQ","IRQ","368","EMR",2023,2965,2250
+"Jordan","JO","JOR","400","EMR",2010,104,173
+"Jordan","JO","JOR","400","EMR",2011,98,214
+"Jordan","JO","JOR","400","EMR",2012,87,156
+"Jordan","JO","JOR","400","EMR",2013,70,154
+"Jordan","JO","JOR","400","EMR",2014,86,197
+"Jordan","JO","JOR","400","EMR",2015,269,152
+"Jordan","JO","JOR","400","EMR",2016,92,381
+"Jordan","JO","JOR","400","EMR",2017,95,81
+"Jordan","JO","JOR","400","EMR",2018,52,43
+"Jordan","JO","JOR","400","EMR",2019,31,46
+"Jordan","JO","JOR","400","EMR",2020,46,
+"Jordan","JO","JOR","400","EMR",2021,117,129
+"Jordan","JO","JOR","400","EMR",2022,110,87
+"Jordan","JO","JOR","400","EMR",2023,97,104
+"Kenya","KE","KEN","404","AFR",2010,7162,544
+"Kenya","KE","KEN","404","AFR",2011,9300,94681
+"Kenya","KE","KEN","404","AFR",2012,11181,0
+"Kenya","KE","KEN","404","AFR",2013,18881,0
+"Kenya","KE","KEN","404","AFR",2014,18200,71094
+"Kenya","KE","KEN","404","AFR",2015,15531,65673
+"Kenya","KE","KEN","404","AFR",2016,13672,0
+"Kenya","KE","KEN","404","AFR",2017,15609,0
+"Kenya","KE","KEN","404","AFR",2018,15769,0
+"Kenya","KE","KEN","404","AFR",2019,16218,68127
+"Kenya","KE","KEN","404","AFR",2020,14894,
+"Kenya","KE","KEN","404","AFR",2021,15411,0
+"Kenya","KE","KEN","404","AFR",2022,17064,0
+"Kenya","KE","KEN","404","AFR",2023,18999,2115
+"Kyrgyzstan","KG","KGZ","417","EUR",2012,0,0
+"Kyrgyzstan","KG","KGZ","417","EUR",2013,0,255
+"Kyrgyzstan","KG","KGZ","417","EUR",2014,0,202
+"Lebanon","LB","LBN","422","EMR",2010,429,27
+"Lebanon","LB","LBN","422","EMR",2011,394,45
+"Lebanon","LB","LBN","422","EMR",2012,550,52
+"Lebanon","LB","LBN","422","EMR",2013,569,34
+"Lebanon","LB","LBN","422","EMR",2014,588,95
+"Lebanon","LB","LBN","422","EMR",2015,642,3
+"Lebanon","LB","LBN","422","EMR",2016,506,53
+"Lebanon","LB","LBN","422","EMR",2017,322,68
+"Lebanon","LB","LBN","422","EMR",2018,378,66
+"Lebanon","LB","LBN","422","EMR",2019,503,153
+"Lebanon","LB","LBN","422","EMR",2020,474,
+"Lebanon","LB","LBN","422","EMR",2021,344,90
+"Lebanon","LB","LBN","422","EMR",2022,385,30
+"Lebanon","LB","LBN","422","EMR",2023,349,57
+"Malawi","MW","MWI","454","AFR",2010,117,73
+"Malawi","MW","MWI","454","AFR",2011,117,73
+"Malawi","MW","MWI","454","AFR",2012,,221
+"Malawi","MW","MWI","454","AFR",2013,3817,
+"Malawi","MW","MWI","454","AFR",2014,3500,
+"Malawi","MW","MWI","454","AFR",2015,3049,0
+"Malawi","MW","MWI","454","AFR",2016,3155,
+"Malawi","MW","MWI","454","AFR",2017,3207,
+"Malawi","MW","MWI","454","AFR",2018,3160,453
+"Malawi","MW","MWI","454","AFR",2019,3601,158
+"Malawi","MW","MWI","454","AFR",2020,3601,
+"Malawi","MW","MWI","454","AFR",2021,3611,0
+"Malawi","MW","MWI","454","AFR",2022,4250,86
+"Malawi","MW","MWI","454","AFR",2023,4327,114
+"Mexico","MX","MEX","484","AMR",2010,23,399
+"Mexico","MX","MEX","484","AMR",2011,28,441
+"Mexico","MX","MEX","484","AMR",2012,60,432
+"Mexico","MX","MEX","484","AMR",2013,55,461
+"Mexico","MX","MEX","484","AMR",2014,81,510
+"Mexico","MX","MEX","484","AMR",2023,6,178
+"Mongolia","MN","MNG","496","WPR",2010,129,0
+"Mongolia","MN","MNG","496","WPR",2011,,111
+"Mongolia","MN","MNG","496","WPR",2012,0,304
+"Mongolia","MN","MNG","496","WPR",2013,338,2223
+"Mongolia","MN","MNG","496","WPR",2014,1001,47
+"Mongolia","MN","MNG","496","WPR",2023,18,167
+"Morocco","MA","MAR","504","EMR",2011,45,945
+"Morocco","MA","MAR","504","EMR",2012,1484,1235
+"Morocco","MA","MAR","504","EMR",2013,1585,600
+"Morocco","MA","MAR","504","EMR",2014,1779,600
+"Morocco","MA","MAR","504","EMR",2022,7390,1264
+"Morocco","MA","MAR","504","EMR",2023,9730,1828
+"Mozambique","MZ","MOZ","508","AFR",2010,,990
+"Mozambique","MZ","MOZ","508","AFR",2011,,1596
+"Mozambique","MZ","MOZ","508","AFR",2013,,966
+"Mozambique","MZ","MOZ","508","AFR",2023,58469,
+"Myanmar","MM","MMR","104","SEA",2010,20475,3775
+"Myanmar","MM","MMR","104","SEA",2011,27977,3861
+"Myanmar","MM","MMR","104","SEA",2012,26879,8999
+"Myanmar","MM","MMR","104","SEA",2013,29858,4608
+"Myanmar","MM","MMR","104","SEA",2014,25978,5873
+"Myanmar","MM","MMR","104","SEA",2015,23513,5561
+"Myanmar","MM","MMR","104","SEA",2016,22079,4614
+"Myanmar","MM","MMR","104","SEA",2017,20262,4560
+"Myanmar","MM","MMR","104","SEA",2018,48703,5389
+"Myanmar","MM","MMR","104","SEA",2019,44522,3725
+"Myanmar","MM","MMR","104","SEA",2020,20363,
+"Myanmar","MM","MMR","104","SEA",2021,24436,1458
+"Myanmar","MM","MMR","104","SEA",2022,37669,1323
+"Myanmar","MM","MMR","104","SEA",2023,39932,3107
+"Nepal","NP","NPL","524","SEA",2011,0,0
+"Nepal","NP","NPL","524","SEA",2012,5366,0
+"Nepal","NP","NPL","524","SEA",2013,2886,2164
+"Nepal","NP","NPL","524","SEA",2014,798,698
+"Nepal","NP","NPL","524","SEA",2015,2714,946
+"Nepal","NP","NPL","524","SEA",2016,5696,7366
+"Nepal","NP","NPL","524","SEA",2017,7227,6598
+"Nepal","NP","NPL","524","SEA",2018,6505,6445
+"Nepal","NP","NPL","524","SEA",2019,5902,5712
+"Nepal","NP","NPL","524","SEA",2020,6234,
+"Nepal","NP","NPL","524","SEA",2021,9436,
+"Nepal","NP","NPL","524","SEA",2022,12041,
+"Nepal","NP","NPL","524","SEA",2023,10848,
+"Nigeria","NG","NGA","566","AFR",2010,13567,18089
+"Nigeria","NG","NGA","566","AFR",2012,8121,14096
+"Nigeria","NG","NGA","566","AFR",2013,13846,10334
+"Nigeria","NG","NGA","566","AFR",2014,13031,330
+"Nigeria","NG","NGA","566","AFR",2015,627,13088
+"Nigeria","NG","NGA","566","AFR",2016,14061,0
+"Nigeria","NG","NGA","566","AFR",2017,11862,11193
+"Nigeria","NG","NGA","566","AFR",2018,12625,10277
+"Nigeria","NG","NGA","566","AFR",2019,17274,12598
+"Nigeria","NG","NGA","566","AFR",2020,35865,
+"Nigeria","NG","NGA","566","AFR",2021,58219,11093
+"Nigeria","NG","NGA","566","AFR",2022,69504,1211
+"Nigeria","NG","NGA","566","AFR",2023,108530,1447
+"Pakistan","PK","PAK","586","EMR",2010,51563,0
+"Pakistan","PK","PAK","586","EMR",2011,19810,1307
+"Pakistan","PK","PAK","586","EMR",2012,56363,925
+"Pakistan","PK","PAK","586","EMR",2013,41690,11759
+"Pakistan","PK","PAK","586","EMR",2014,55254,161
+"Pakistan","PK","PAK","586","EMR",2015,72144,6109
+"Pakistan","PK","PAK","586","EMR",2016,97493,2587
+"Pakistan","PK","PAK","586","EMR",2017,108370,2620
+"Pakistan","PK","PAK","586","EMR",2018,116010,3804
+"Pakistan","PK","PAK","586","EMR",2019,117919,3596
+"Pakistan","PK","PAK","586","EMR",2020,113785,
+"Pakistan","PK","PAK","586","EMR",2021,137603,2663
+"Pakistan","PK","PAK","586","EMR",2022,176151,3624
+"Pakistan","PK","PAK","586","EMR",2023,209752,3246
+"Peru","PE","PER","604","AMR",2010,,5993
+"Peru","PE","PER","604","AMR",2011,3,5900
+"Peru","PE","PER","604","AMR",2012,0,6576
+"Peru","PE","PER","604","AMR",2013,,6852
+"Peru","PE","PER","604","AMR",2014,0,8164
+"Peru","PE","PER","604","AMR",2023,4,10098
+"Philippines","PH","PHL","608","WPR",2010,12081,2138
+"Philippines","PH","PHL","608","WPR",2011,14704,9327
+"Philippines","PH","PHL","608","WPR",2012,19788,6761
+"Philippines","PH","PHL","608","WPR",2013,19946,8253
+"Philippines","PH","PHL","608","WPR",2014,878,5949
+"Philippines","PH","PHL","608","WPR",2015,18442,79197
+"Philippines","PH","PHL","608","WPR",2016,91584,56124
+"Philippines","PH","PHL","608","WPR",2017,55538,69221
+"Philippines","PH","PHL","608","WPR",2018,142900,68148
+"Philippines","PH","PHL","608","WPR",2019,189574,76548
+"Philippines","PH","PHL","608","WPR",2020,58866,
+"Philippines","PH","PHL","608","WPR",2021,72072,1148
+"Philippines","PH","PHL","608","WPR",2022,124555,59351
+"Philippines","PH","PHL","608","WPR",2023,108413,22313
+"Republic of Korea","KR","KOR","410","WPR",2010,30915,2252
+"Republic of Korea","KR","KOR","410","WPR",2011,37403,0
+"Republic of Korea","KR","KOR","410","WPR",2012,0,0
+"Republic of Korea","KR","KOR","410","WPR",2013,0,0
+"Republic of Korea","KR","KOR","410","WPR",2014,0,0
+"Republic of Korea","KR","KOR","410","WPR",2015,0,0
+"Republic of Korea","KR","KOR","410","WPR",2016,0,0
+"Republic of Korea","KR","KOR","410","WPR",2017,0,0
+"Republic of Korea","KR","KOR","410","WPR",2018,0,0
+"Republic of Korea","KR","KOR","410","WPR",2019,0,0
+"Republic of Korea","KR","KOR","410","WPR",2020,0,
+"Republic of Korea","KR","KOR","410","WPR",2021,0,0
+"Republic of Korea","KR","KOR","410","WPR",2022,0,0
+"Republic of Korea","KR","KOR","410","WPR",2023,0,0
+"Sierra Leone","SL","SLE","694","AFR",2012,592,
+"Sierra Leone","SL","SLE","694","AFR",2013,721,0
+"Sierra Leone","SL","SLE","694","AFR",2014,519,100
+"Sierra Leone","SL","SLE","694","AFR",2023,825,958
+"Somalia","SO","SOM","706","EMR",2010,211,29
+"Somalia","SO","SOM","706","EMR",2011,320,22
+"Somalia","SO","SOM","706","EMR",2012,75,330
+"Somalia","SO","SOM","706","EMR",2013,666,
+"Somalia","SO","SOM","706","EMR",2014,0,800
+"Somalia","SO","SOM","706","EMR",2022,2851,
+"Somalia","SO","SOM","706","EMR",2023,2962,0
+"South Africa","ZA","ZAF","710","AFR",2018,4549,3651
+"South Africa","ZA","ZAF","710","AFR",2019,1555,
+"South Africa","ZA","ZAF","710","AFR",2020,1726,
+"South Africa","ZA","ZAF","710","AFR",2023,5082,
+"Sri Lanka","LK","LKA","144","SEA",2011,553,3579
+"Sri Lanka","LK","LKA","144","SEA",2012,445,5004
+"Sri Lanka","LK","LKA","144","SEA",2013,406,756
+"Sri Lanka","LK","LKA","144","SEA",2014,509,4457
+"Sri Lanka","LK","LKA","144","SEA",2015,726,4575
+"Sri Lanka","LK","LKA","144","SEA",2016,892,4022
+"Sri Lanka","LK","LKA","144","SEA",2017,798,5429
+"Sri Lanka","LK","LKA","144","SEA",2018,656,5788
+"Sri Lanka","LK","LKA","144","SEA",2019,635,6628
+"Sri Lanka","LK","LKA","144","SEA",2020,506,
+"Sri Lanka","LK","LKA","144","SEA",2021,412,5770
+"Sri Lanka","LK","LKA","144","SEA",2022,717,5268
+"Sri Lanka","LK","LKA","144","SEA",2023,843,8060
+"Tajikistan","TJ","TJK","762","EUR",2010,0,0
+"Tajikistan","TJ","TJK","762","EUR",2011,0,1237
+"Tajikistan","TJ","TJK","762","EUR",2012,0,1549
+"Tajikistan","TJ","TJK","762","EUR",2013,,240
+"Tajikistan","TJ","TJK","762","EUR",2014,883,194
+"Tajikistan","TJ","TJK","762","EUR",2015,883,194
+"Tajikistan","TJ","TJK","762","EUR",2023,0,0
+"Thailand","TH","THA","764","SEA",2012,1267,1532
+"Thailand","TH","THA","764","SEA",2013,1267,1532
+"Thailand","TH","THA","764","SEA",2014,1049,1733
+"Thailand","TH","THA","764","SEA",2015,2154,3444
+"Thailand","TH","THA","764","SEA",2016,2200,3714
+"Thailand","TH","THA","764","SEA",2017,7186,6287
+"Thailand","TH","THA","764","SEA",2018,8435,7562
+"Thailand","TH","THA","764","SEA",2019,9359,6721
+"Thailand","TH","THA","764","SEA",2020,7942,
+"Thailand","TH","THA","764","SEA",2021,5403,6456
+"Thailand","TH","THA","764","SEA",2022,5966,6294
+"Thailand","TH","THA","764","SEA",2023,6764,7040
+"Uganda","UG","UGA","800","AFR",2023,18241,
+"Ukraine","UA","UKR","804","EUR",2012,,1863
+"Ukraine","UA","UKR","804","EUR",2013,,3423
+"Ukraine","UA","UKR","804","EUR",2014,0,2211
+"Ukraine","UA","UKR","804","EUR",2015,0,0
+"United Republic of Tanzania","TZ","TZA","834","AFR",2010,11156,0
+"United Republic of Tanzania","TZ","TZA","834","AFR",2012,13734,0
+"United Republic of Tanzania","TZ","TZA","834","AFR",2013,10040,0
+"United Republic of Tanzania","TZ","TZA","834","AFR",2014,4724,
+"United Republic of Tanzania","TZ","TZA","834","AFR",2015,7773,
+"United Republic of Tanzania","TZ","TZA","834","AFR",2016,7098,
+"United Republic of Tanzania","TZ","TZA","834","AFR",2017,6939,
+"United Republic of Tanzania","TZ","TZA","834","AFR",2018,14396,
+"United Republic of Tanzania","TZ","TZA","834","AFR",2019,15913,0
+"United Republic of Tanzania","TZ","TZA","834","AFR",2020,15396,
+"United Republic of Tanzania","TZ","TZA","834","AFR",2021,14877,
+"United Republic of Tanzania","TZ","TZA","834","AFR",2022,14755,
+"United Republic of Tanzania","TZ","TZA","834","AFR",2023,14760,
+"Uzbekistan","UZ","UZB","860","EUR",2010,0,7013
+"Uzbekistan","UZ","UZB","860","EUR",2011,0,395
+"Uzbekistan","UZ","UZB","860","EUR",2012,0,781
+"Uzbekistan","UZ","UZB","860","EUR",2013,0,895
+"Uzbekistan","UZ","UZB","860","EUR",2014,0,567
+"Uzbekistan","UZ","UZB","860","EUR",2015,0,6141
+"Viet Nam","VN","VNM","704","WPR",2010,3190,
+"Viet Nam","VN","VNM","704","WPR",2011,4320,2658
+"Viet Nam","VN","VNM","704","WPR",2012,4724,3404
+"Viet Nam","VN","VNM","704","WPR",2013,5262,3684
+"Viet Nam","VN","VNM","704","WPR",2014,2682,6596
+"Viet Nam","VN","VNM","704","WPR",2015,2269,6913
+"Viet Nam","VN","VNM","704","WPR",2016,1505,6930
+"Viet Nam","VN","VNM","704","WPR",2017,1727,7301
+"Viet Nam","VN","VNM","704","WPR",2018,3257,7713
+"Viet Nam","VN","VNM","704","WPR",2019,3617,10339
+"Viet Nam","VN","VNM","704","WPR",2020,3707,
+"Viet Nam","VN","VNM","704","WPR",2021,6863,8603
+"Viet Nam","VN","VNM","704","WPR",2022,9956,15521
+"Viet Nam","VN","VNM","704","WPR",2023,10237,23810
+"Zambia","ZM","ZMB","894","AFR",2023,918,
+"Zimbabwe","ZW","ZWE","716","AFR",2014,0,0
+"Zimbabwe","ZW","ZWE","716","AFR",2023,80,2742
