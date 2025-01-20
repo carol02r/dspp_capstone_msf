@@ -1,0 +1,20 @@
+Step,Benchmark,Numerator,Denominator
+1,1A,Number of household contacts of new and relapse cases of bacteriologically confirmed and notified pulmonary TB who were screened for TB,Number of household contacts of new and relapse cases of bacteriologically confirmed and notified pulmonary TB
+1,1B,Number of people living with HIV who were screened for TB,Total number of people living with HIV
+1,1C,Number of people newly diagnosed with HIV who were screened for TB,Number of people newly diagnosed with HIV
+1,1D,Number of people in prisons who were screened for TB,Number of people in prisons
+1,1E,Number of miners who were screened for TB,Number of miners exposed to silica dust
+1,2,Number of districts in which chest X-ray is used regularly (with or without CAD) for TB screening,Total number of districts in the country
+2,3,"Number of districts in which all facilities have a TB diagnostic algorithm that requires a WRD to be used as the initial diagnostic test for all individuals with presumptive TB, including children and individuals with HIV (combined with LF-LAM) and extrapulmonary TB",Total number of districts in the country
+2,4,Number of primary health-care facilities with access to WRDs (either on site or through a sample referral system),Total number of primary health-care facilities in the country
+2,5,Number of notified new and relapse TB cases tested initially with a WRD,Total number of notified people with TB
+2,6,Number of WRD tests that can be performed with the existing instruments,Number of tests required to test all people with presumptive TB
+3,7,Number of WRD TB testing sites with annual error rates of 5% or less,Number of WRD TB testing sites in the country
+3,8,Total number of people with presumptive TB tested with a WRD,Total number of people with presumptive TB
+3,9A,Number of people notified with bacteriologically confirmed pulmonary TB with DST results for rifampicin resistance.,Number of people notified with bacteriologically confirmed pulmonary TB
+3,9B,Number of people notified with bacteriologically confirmed rifampicin-resistant pulmonary TB and DST results for fluoroquinolones,Number of people notified with bacteriologically confirmed rifampicin-resistant pulmonary TB
+3,9C,Number of people notified with bacteriologically confirmed rifampicin- and fluoroquinolone-resistant pulmonary TB with DST results for bedaquiline,Number of people notified with bacteriologically confirmed rifampicin- and fluoroquinolone-resistant pulmonary TB
+3,9D,Number of people notified with bacteriologically confirmed rifampicin- and fluoroquinolone-resistant pulmonary TB with DST results for linezolid,Number of people notified with bacteriologically confirmed rifampicin- and fluoroquinolone-resistant pulmonary TB
+4,10,"Number of people notified with pulmonary TB tested with a WRD, irrespective of results, before starting treatment","Total number of people notified with pulmonary TB, both bacteriologically confirmed and clinically diagnosed"
+4,11,Number of districts that monitor test-positivity rate,Total number of districts in the country
+4,12,Number of laboratories that achieve a turn-around time within 48 hours for at least 80% of samples received for WRD testing,Number of WRD testing laboratories

@@ -1,0 +1,111 @@
+/* Define the step colours in one place */
+:root {
+	--step-1-colour: #064871;
+	--step-2-colour: #DA471F;
+	--step-3-colour: #0096B3;
+	--step-4-colour: #AD176E;
+}
+
+/* Recreating simple striped bootstrap table */
+#uad {
+  border-spacing: 0;
+  border-collapse: collapse;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  /* Next two lines to allow horizontal scrolling on narrow screens */
+  display: block;
+  overflow-x: auto;
+}
+
+#uad th {
+  border-bottom: 2px solid #DDDDDD;
+  padding: 8px;
+}
+
+#uad td {
+  border-top: 1px solid #DDDDDD;
+  padding: 8px;
+  vertical-align: top;
+}
+
+/* light gray for odd rows */
+#uad tr:nth-child(odd) td {
+  background-color: #F5F5F5;    
+}
+
+/* light gray when hovering over a row */
+#uad tr:hover td {
+  background-color: #DDDDDD;
+}
+
+/* Centre-align all column headings */
+#uad th {
+  text-align: center !important;
+}
+
+/* Highlight the step column */
+#uad td:nth-child(1) {
+  text-align: center;
+  color: white; 
+  font-weight: bold; 
+}
+
+td.step-1 {
+  background-color: var(--step-1-colour) !important; 
+  border-color: var(--step-1-colour)  !important; 
+}
+
+td.step-2 {
+  background-color: var(--step-2-colour) !important; 
+  border-color: var(--step-2-colour)  !important; 
+}
+
+td.step-3 {
+  background-color: var(--step-3-colour) !important; 
+  border-color: var(--step-3-colour)  !important; 
+}
+
+td.step-4 {
+  background-color: var(--step-4-colour) !important; 
+  border-color: var(--step-4-colour)  !important; 
+}
+
+
+/* Centre-align the benchmark column */
+#uad td:nth-child(3) {
+  text-align: center !important;
+}
+
+/* prevent numbers from wrapping in the numeric columns, and have them right-aligned */
+#uad td:nth-child(5), #uad td:nth-child(6) {
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* Control display of the percentage column containg horizontal bars */
+#uad th:nth-child(5) {
+	/* Aim for the bar chart to take up half of the available table width */
+	width: 50%;
+}
+
+#uad td:nth-child(7) {
+	/* Left border to act as zero axis for the horizontal bar charts */
+	border-left: 2px solid #555555;
+	padding-left: 0px;
+}
+
+/* Horizontal bar */
+.hbar {
+	display: block; 
+	padding: 5px 0px 5px 0px;
+	color: #cccccc; 
+	text-align: right;
+	cursor: crosshair;
+}
+
+/* Final row of a step's set of benchmarks */
+tr.step-end {
+
+	border-bottom: 3px solid #999999;
+
+}
