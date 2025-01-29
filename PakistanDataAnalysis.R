@@ -6,6 +6,7 @@ library(patchwork)
 library(RColorBrewer)
 library(readr)
 library(showtext)
+library(stringdist)
 
 
 #0. Defining style ========================================
@@ -65,9 +66,10 @@ theme_dspp_cat <- function() {
 
 
 
-##################################################################################
-################## 1. Pakistan map - estimates 2022 ##############################
-#################################################################################
+###############################################################################################################
+################## 1. Pakistan map - estimates, cases and health facilities 2022 ##############################
+###############################################################################################################
+
 
 #1. Data transformation ========================================
 
@@ -154,3 +156,201 @@ map3 <- ggplot(data = PAKshp) +
 map3
 
 ggsave("figures/map3_hfac_per100k_2022.png", width = 10, height = 10, units = "cm", dpi = 300)
+
+
+##################################################################################
+################## 2. genX per district wrangling ###############################
+#################################################################################
+
+
+#read from gitbub: https://github.com/carol02r/dspp_capstone_msf/blob/main/PAKISTAN_cleaned_data_reports_papers/district_level/genx_per_district.xlsx
+url <- "https://raw.githubusercontent.com/carol02r/dspp_capstone_msf/refs/heads/main/PAKISTAN_cleaned_data_reports_papers/district_level/genx_per_district.csv"
+genx_dis <- read_csv(url)
+
+genx_dis<- genx_dis %>%
+  select(where(~ !all(is.na(.)))) %>% 
+  #filter for Q4 2018
+  filter(quarter == "Q1 2018") 
+
+#matching names from genx_dis to PAKreg ----------------
+
+#turn everything tolower genx_dis and PAKreg
+genx_dis$district <- tolower(genx_dis$district)
+PAKreg$district <- tolower(PAKreg$district)
+
+#remove - or any special characters from genx_dis and PAKreg
+genx_dis$district <- gsub("-", " ", genx_dis$district)
+PAKreg$district <- gsub("-", " ", PAKreg$district)
+
+#using fuzzy matching to match the names using stringdist
+# Function to find the best match from PAKreg for each district in genx_dis
+match_districts <- function(districts_to_match, reference_districts) {
+  sapply(districts_to_match, function(district) {
+    distances <- stringdist(district, reference_districts, method = "lv")  # Levenshtein distance
+    best_match <- reference_districts[which.min(distances)]  # Pick closest match
+    return(best_match)
+  })
+}
+
+# Apply fuzzy matching
+#genx_dis <- genx_dis %>%
+  #mutate(matched_district = match_districts(district, PAKreg$district))
+#matchlist <- genx_dis %>% select(district, matched_district)
+
+#after some manual adjustments and qual assessment done to match special cases, given changes in boundaries
+#lets merged back and make a few changes -----------------------------------------------------------------
+
+#read matchlist https://raw.githubusercontent.com/carol02r/dspp_capstone_msf/refs/heads/main/PAKISTAN_cleaned_data_reports_papers/district_level/matchlist_district_names.csv
+url <- "https://raw.githubusercontent.com/carol02r/dspp_capstone_msf/refs/heads/main/PAKISTAN_cleaned_data_reports_papers/district_level/matchlist_district_names.csv"
+matchlistclean <- read_csv(url)
+
+#merge back to genx_dis (using district_genxfile columns) 
+genx_dis <- genx_dis %>%
+  left_join(matchlistclean, by = c("district" = "district_genxfile"))
+
+#1. tank rows should be merged into one in genx_dis (fr tank, district_genxfile column)
+#2. bannu rows should be merged into one in  genx_dis (fr bannu and bannu, district_genxfile column)
+#3. kohat rows should be merged into one in genx_dis (fr kohat and kohat, district_genxfile column)
+
+genx_dis <- genx_dis %>%
+  mutate(across(c(
+    dots_population,
+    grand_total_new_relapsed_cases,
+    total_new_opd_quarter,
+    presumptive_tb_cases_identified,
+    presumptive_tb_patients_tested_afb_or_genx,
+    confirmed_tb_cases_detected,
+    new_relapse_tb_cases_tested_xpert
+  ), as.numeric)) %>% 
+  group_by(district_pakregfile) %>%
+  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") %>%
+  filter(district_pakregfile %in% c("tank", "bannu", "kohat") | !duplicated(district_pakregfile))
+
+
+#4. karachi (west, south etc) should be merged into one in PAKshp -------------------------------------------
+#5. hunza and nagar should be merged into one in PAKshp
+#6. shigar and kharmang should be merged into one in PAKshp
+
+PAKshp$district <- gsub("-", " ", PAKshp$district)
+PAKshp$district <- tolower(PAKshp$district)
+
+#filter PAKSHP to contain the following rows:district_id, district, region, tbnot_2022, pop_size, inc_100k, inc_100k_reg, hc_facilities, hc_fac_100k, hc_fac_cat, cdr, cdr_reg, cdrcat, cdrregcat, notified_cases_per_100k
+PAKshp_simple <- PAKshp %>%
+  select(district, region, tbnot_2022, pop_size, inc_100k, inc_100k_reg, hc_facilities, hc_fac_100k, cdr, cdr_reg, notified_cases_per_100k)
+
+# Assuming your shapefile is named `genx_shapefile`
+karachi_districts <- c("central karachi", "east karachi", "korangi karachi", 
+                       "malir karachi", "south karachi", "west karachi")
+hunza_districts <- c("nagar", "hunza")
+
+# Merge Karachi districts and rename
+karachi_merged <- PAKshp_simple %>%
+  filter(district %in% karachi_districts) %>%
+  summarise(
+    district = "karachi total", # Rename merged district
+    # Sum numeric variables (default)
+    across(
+      where(is.numeric) & !c("inc_100k", "inc_100k_reg", "hc_fac_100k", "cdr", "cdr_reg", "notified_cases_per_100k"), 
+      sum, na.rm = TRUE
+    ),
+    # Take the average for specific columns
+    across(
+      c(inc_100k, inc_100k_reg, hc_fac_100k, cdr, cdr_reg, notified_cases_per_100k), 
+      mean, na.rm = TRUE
+    ),
+    geometry = st_union(geometry) # Merge geometries into one
+  )
+
+
+# Merge Hunza districts
+hunza_merged <- PAKshp_simple %>%
+  filter(district %in% hunza_districts) %>%
+  summarise(
+    district = "hunza", # New district name
+    across(
+      where(is.numeric) & !c("inc_100k", "inc_100k_reg", "hc_fac_100k", "cdr", "cdr_reg", "notified_cases_per_100k"),
+      sum, na.rm = TRUE
+    ),
+    across(
+      c(inc_100k, inc_100k_reg, hc_fac_100k, cdr, cdr_reg, notified_cases_per_100k),
+      mean, na.rm = TRUE
+    ),
+    geometry = st_union(geometry) # Merge geometries
+  )
+
+#add rows 
+PAKshp_simple <- PAKshp_simple %>%
+  filter(!district %in% c(karachi_districts, hunza_districts)) %>% # Remove merged districts
+  bind_rows(karachi_merged,hunza_merged) # Add merged rows
+
+# Merging shapefie with genx_dis --------------------------------------------------------
+
+#how many genx_dis$district_pakregfile are in PAKshp_simple$district
+sum(genx_dis$district_pakregfile %in% PAKshp_simple$district)
+
+#how many unique values are in genx_dis$district_pakregfile
+length(unique(genx_dis$district_pakregfile))
+#how many unique values are in PAKshp_simple$district
+length(unique(PAKshp_simple$district))
+
+#which repeated value PAKshp_simple$district
+table(PAKshp_simple$district)
+
+# Find the districts in PAKshp_simple that are not in genx_dis
+non_matching_districts <- setdiff(PAKshp_simple$district, genx_dis$district_pakregfile)
+non_matching_districts
+
+#merge genx_dis to PAKshp_simple using district_pakregfile and district
+PAKshp_genx <- PAKshp_simple %>%
+  left_join(genx_dis, by = c("district" = "district_pakregfile"))
+
+#save the shapefile
+st_write(PAKshp_genx, "PAKISTAN_cleaned_data_reports_papers/shapefiles_pakistan/PAKshp_genx.shp")
+
+
+
+##################################################################################
+################## 3. genX per district plot ####################################
+#################################################################################
+
+#Figure 4: new_relapse_tb_cases_tested_xpert2 ---------------------------
+map4 <- ggplot(data = PAKshp_genx) +
+  geom_sf(aes(fill = pmin(new_relapse_tb_cases_tested_xpert, 300)), colour = "white", linewidth = 0.1) + 
+  geom_sf(data = PAKreg, colour = '#432818', fill = NA, linewidth = 0.1) +
+  scale_fill_gradientn(
+    name = "TB cases tested with GenX by district (Q1 2018)", # Updated title
+    colours = c("#f7e1f6", "#d4b2d8", "#b484c8", "#9457b7", "#7329a6", "#4e007e"), # Purple palette
+    limits = c(0, 1000), 
+    breaks = c(0, 200, 400, 600, 800, 1000), 
+    labels = c("0", "200", "400", "600", "800", "1000") # Fixed labels
+  ) + theme_dspp()
+
+apply_dspp (map4)
+
+#ggsave 
+ggsave("PAKISTAN_case_study_analysis/figures/map4_genxtesting_absolute.png", width = 10, height = 10, units = "cm", dpi = 300)
+
+#figure 5: % tested with genX ---------------------------
+#new variable: percentage new_relapse_tb_cases_tested_xpert of confirmed_tb_cases_detected 
+PAKshp_genx$perc_confirmed_genx <- (PAKshp_genx$new_relapse_tb_cases_tested_xpert / PAKshp_genx$confirmed_tb_cases_detected) * 100
+
+#turn nan those > 100
+PAKshp_genx$perc_confirmed_genx[PAKshp_genx$perc_confirmed_genx > 100] <- NA
+
+#Figure 4: new_relapse_tb_cases_tested_xpert2 ---------------------------
+map5 <- ggplot(data = PAKshp_genx) +
+  geom_sf(aes(fill = pmin(perc_confirmed_genx, 300)), colour = "white", linewidth = 0.1) + 
+  geom_sf(data = PAKreg, colour = '#432818', fill = NA, linewidth = 0.1) +
+  scale_fill_gradientn(
+    name = "% of confirmed TB cases tested with GenX by district (Q1 2018)", # Updated title
+    colours = c("#fde0ef", "#fbb4d9", "#f768a1", "#dd3497", "#ae017e", "#7a0177"),
+    limits = c(0, 100), 
+    breaks = c(0, 20, 40, 60, 80, 100), 
+    labels = c("0", "20", "40", "60", "80", "100") # Fixed labels
+  ) + theme_dspp()
+
+apply_dspp (map5)
+ggsave("PAKISTAN_case_study_analysis/figures/map5_genxtesting_perc.png", width = 10, height = 10, units = "cm", dpi = 300)
+
+
+
