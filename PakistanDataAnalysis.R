@@ -21,7 +21,8 @@ theme_dspp <- function() {
     theme(
       panel.background = element_rect(fill = "white", colour = NA), 
       plot.background = element_rect(fill = "white", colour = NA),
-      legend.title = element_text(size = 18, family = "roboto"),
+      legend.position = "top",  # Place legend at the top
+      legend.title = element_text(size = 16, family = "roboto"),
       legend.text = element_text(size = 16, family = "roboto"),
       legend.key = element_rect(fill = "white", colour = NA), # Proper key background
       legend.key.width = unit(2, 'cm'),
@@ -51,16 +52,16 @@ theme_dspp_cat <- function() {
       panel.background = element_rect(fill = "white", colour = NA), 
       plot.background = element_rect(fill = "white", colour = NA),
       # Legend settings for vertical layout
-      legend.position = c(0.2, 0.85), # Top-left corner inside the plot
+      legend.position = c(0.3, 0.80), # Top-left corner inside the plot
       legend.direction = "vertical", # Arrange legend items vertically
-      legend.title = element_text(size = 16, face = "bold", family = "roboto"),
-      legend.text = element_text(size = 12, family = "roboto"),
+      legend.title = element_text(size = 26,  family = "roboto"),
+      legend.text = element_text(size = 16, family = "roboto"),
       legend.key = element_rect(fill = "white", colour = "black"), # Proper key background
-      legend.key.height = unit(0.4, "cm"), # Increase height for better visibility
-      legend.key.width = unit(0.4, "cm"), # Keep width balanced
+      legend.key.height = unit(0.5, "cm"), # Increase height for better visibility
+      legend.key.width = unit(0.5, "cm"), # Keep width balanced
       legend.spacing.y = unit(0.5, "cm"), # Add vertical spacing between keys
-      legend.box.margin = margin(t = 5, r = 5, b = 5, l = 5), # Margin around the legend box
-      legend.margin = margin(t = 10, r = 10, b = 10, l = 10) # Inner margin of legend
+      legend.box.margin = margin(t = 0, r = 10, b = 0, l = 0),
+      legend.margin = margin(t = 5, r = 10, b = 5, l = 10)
     )
 }
 
@@ -119,7 +120,7 @@ map1 <- ggplot(data = PAKshp) +
 
 apply_dspp (map1)
 
-ggsave("figures/map1_notifications_2022.png", width = 10, height = 10, units = "cm", dpi = 300)
+#ggsave("PAKISTAN_case_study_analysis/figures/map1_notifications_2022.png", width = 10, height = 10, units = "cm", dpi = 300)
 
 #Figure 2: Detection Rate in 2022 (based on 2022 paper estimates)
 map2 <- ggplot(data = PAKshp) +
@@ -133,7 +134,7 @@ map2 <- ggplot(data = PAKshp) +
   theme_dspp_cat()
 map2
 
-ggsave("figures/map2_cdr_2022.png", width = 10, height = 10, units = "cm", dpi = 300)
+#ggsave("PAKISTAN_case_study_analysis/figures/map2_cdr_2022.png", width = 10, height = 10, units = "cm", dpi = 300)
 
 #Figure 3: Health Facilities per 100k in 2022
 PAKshp$hc_fac_cat <- cut(
@@ -155,7 +156,7 @@ map3 <- ggplot(data = PAKshp) +
   theme_dspp_cat()
 map3
 
-ggsave("figures/map3_hfac_per100k_2022.png", width = 10, height = 10, units = "cm", dpi = 300)
+#ggsave("figures/map3_hfac_per100k_2022.png", width = 10, height = 10, units = "cm", dpi = 300)
 
 
 ##################################################################################
@@ -167,10 +168,16 @@ ggsave("figures/map3_hfac_per100k_2022.png", width = 10, height = 10, units = "c
 url <- "https://raw.githubusercontent.com/carol02r/dspp_capstone_msf/refs/heads/main/PAKISTAN_cleaned_data_reports_papers/district_level/genx_per_district.csv"
 genx_dis <- read_csv(url)
 
-genx_dis<- genx_dis %>%
-  select(where(~ !all(is.na(.)))) %>% 
-  #filter for Q4 2018
-  filter(quarter == "Q1 2018") 
+genx_dis <- genx_dis %>%
+  select(where(~ !all(is.na(.)))) %>%
+  filter(!is.na(district)) %>%    
+  mutate(district = case_when(
+    district %in% c("Abbotabad", "Abbottabad") ~ "Abbottabad",
+    district %in% c("Batagram", "Battagram") ~ "Battagram",
+    district %in% c("Charsada", "Charsadda") ~ "Charsadda",
+    TRUE ~ district
+  ))
+
 
 #matching names from genx_dis to PAKreg ----------------
 
@@ -184,13 +191,11 @@ PAKreg$district <- gsub("-", " ", PAKreg$district)
 
 #using fuzzy matching to match the names using stringdist
 # Function to find the best match from PAKreg for each district in genx_dis
-match_districts <- function(districts_to_match, reference_districts) {
-  sapply(districts_to_match, function(district) {
-    distances <- stringdist(district, reference_districts, method = "lv")  # Levenshtein distance
-    best_match <- reference_districts[which.min(distances)]  # Pick closest match
-    return(best_match)
-  })
-}
+#match_districts <- function(districts_to_match, reference_districts) {
+  #sapply(districts_to_match, function(district) {
+    #distances <- stringdist(district, reference_districts, method = "lv")  # Levenshtein distance
+    #best_match <- reference_districts[which.min(distances)]  # Pick closest match
+    #return(best_match)})}
 
 # Apply fuzzy matching
 #genx_dis <- genx_dis %>%
@@ -223,9 +228,12 @@ genx_dis <- genx_dis %>%
     new_relapse_tb_cases_tested_xpert
   ), as.numeric)) %>% 
   group_by(district_pakregfile) %>%
-  summarise(across(where(is.numeric), sum, na.rm = TRUE), .groups = "drop") %>%
+  summarise(
+    dots_population = first(dots_population), # Keep the first value of dots_population
+    across(where(is.numeric), sum, na.rm = TRUE), # Sum all numeric columns
+    .groups = "drop"
+  ) %>%
   filter(district_pakregfile %in% c("tank", "bannu", "kohat") | !duplicated(district_pakregfile))
-
 
 #4. karachi (west, south etc) should be merged into one in PAKshp -------------------------------------------
 #5. hunza and nagar should be merged into one in PAKshp
@@ -305,7 +313,7 @@ PAKshp_genx <- PAKshp_simple %>%
   left_join(genx_dis, by = c("district" = "district_pakregfile"))
 
 #save the shapefile
-st_write(PAKshp_genx, "PAKISTAN_cleaned_data_reports_papers/shapefiles_pakistan/PAKshp_genx.shp")
+#st_write(PAKshp_genx, "PAKISTAN_cleaned_data_reports_papers/shapefiles_pakistan/PAKshp_genx.shp")
 
 
 
@@ -313,44 +321,101 @@ st_write(PAKshp_genx, "PAKISTAN_cleaned_data_reports_papers/shapefiles_pakistan/
 ################## 3. genX per district plot ####################################
 #################################################################################
 
-#Figure 4: new_relapse_tb_cases_tested_xpert2 ---------------------------
+#Figure 4: new_relapse_tb_cases_tested_xpert2 ------------------------------------------- 
+
 map4 <- ggplot(data = PAKshp_genx) +
-  geom_sf(aes(fill = pmin(new_relapse_tb_cases_tested_xpert, 300)), colour = "white", linewidth = 0.1) + 
+  geom_sf(aes(fill = pmin(new_relapse_tb_cases_tested_xpert, 5000)), colour = "white", linewidth = 0.1) + 
   geom_sf(data = PAKreg, colour = '#432818', fill = NA, linewidth = 0.1) +
   scale_fill_gradientn(
-    name = "TB cases tested with GenX by district (Q1 2018)", # Updated title
-    colours = c("#f7e1f6", "#d4b2d8", "#b484c8", "#9457b7", "#7329a6", "#4e007e"), # Purple palette
-    limits = c(0, 1000), 
-    breaks = c(0, 200, 400, 600, 800, 1000), 
-    labels = c("0", "200", "400", "600", "800", "1000") # Fixed labels
+    name = "TB cases tested with GenX (2018)", # Updated title
+    colours = c("black", "#f7e1f6", "#d4b2d8", "#b484c8", "#9457b7", "#7329a6", "#4e007e"), # Black for 0
+    values = scales::rescale(c(0, 1, 1000, 2000, 3000, 4000, 5000)), # Adjust spacing for black
+    limits = c(0, 5000),
+    breaks = c(0, 1000, 2000, 3000, 4000),
+    labels = c("0 (no genX)","1000", "2000", "3000", "4000+")
   ) + theme_dspp()
 
 apply_dspp (map4)
 
-#ggsave 
-ggsave("PAKISTAN_case_study_analysis/figures/map4_genxtesting_absolute.png", width = 10, height = 10, units = "cm", dpi = 300)
+#ggsave("PAKISTAN_case_study_analysis/figures/map4_genxtesting_absolute.png", width = 10, height = 10, units = "cm", dpi = 300)
 
-#figure 5: % tested with genX ---------------------------
+
+
+#figure 5: % tested with genX --------------------------------------------------------
+
 #new variable: percentage new_relapse_tb_cases_tested_xpert of confirmed_tb_cases_detected 
 PAKshp_genx$perc_confirmed_genx <- (PAKshp_genx$new_relapse_tb_cases_tested_xpert / PAKshp_genx$confirmed_tb_cases_detected) * 100
 
 #turn nan those > 100
-PAKshp_genx$perc_confirmed_genx[PAKshp_genx$perc_confirmed_genx > 100] <- NA
-
-#Figure 4: new_relapse_tb_cases_tested_xpert2 ---------------------------
+PAKshp_genx$perc_confirmed_genx[PAKshp_genx$perc_confirmed_genx > 100] <- 100
 map5 <- ggplot(data = PAKshp_genx) +
-  geom_sf(aes(fill = pmin(perc_confirmed_genx, 300)), colour = "white", linewidth = 0.1) + 
+  geom_sf(aes(fill = cut(perc_confirmed_genx, 
+                         breaks = c(-Inf, 0, 20, 40, 60, 80, Inf), 
+                         labels = c("GenX not available", "1-20%", "21-40%", "41-60%", "61-80%", "80%+"))), 
+          colour = "white", linewidth = 0.1) + 
   geom_sf(data = PAKreg, colour = '#432818', fill = NA, linewidth = 0.1) +
-  scale_fill_gradientn(
-    name = "% of confirmed TB cases tested with GenX by district (Q1 2018)", # Updated title
-    colours = c("#fde0ef", "#fbb4d9", "#f768a1", "#dd3497", "#ae017e", "#7a0177"),
-    limits = c(0, 100), 
-    breaks = c(0, 20, 40, 60, 80, 100), 
-    labels = c("0", "20", "40", "60", "80", "100") # Fixed labels
-  ) + theme_dspp()
+  scale_fill_manual(
+    name = "Percentage of confirmed TB cases tested with GenX (2018)",
+    values = c(
+      "GenX not available" = "black",
+      "1-20%" = "#ffccd5",
+      "21-40%" = "#ff8fa3",
+      "41-60%" = "#ff4d6d",
+      "61-80%" = "#c9184a",
+      "80%+" = "#800f2f"
+    )) +  theme_dspp_cat()
 
-apply_dspp (map5)
-ggsave("PAKISTAN_case_study_analysis/figures/map5_genxtesting_perc.png", width = 10, height = 10, units = "cm", dpi = 300)
+map5
 
+ggsave("PAKISTAN_case_study_analysis/figures/map5_genxtesting_perc.png", width = 15, height = 15, units = "cm", dpi = 300)
 
+#6. genX presence vs outcomes  --------------------------------------------------
 
+# Create the Case Detection Rate (CDR) categories
+PAKshp_genx <- PAKshp_genx %>%
+  mutate(cdrcat = cut(
+    cdr, 
+    breaks = c(-Inf, 0.2, 0.4, 0.6, Inf),  # Adjusted for simplified ranges
+    labels = c("0-20%", "20-40%", "40-60%", "80%+") # Fixed labels
+  ))
+
+# Extract centroids for GenX bubbles
+PAKshp_genx_centroids <- PAKshp_genx %>%
+  st_centroid() %>%
+  st_coordinates() %>%
+  as.data.frame() %>%
+  mutate(
+    district = PAKshp_genx$district_pakregfile,  # Keep district name
+    perc_confirmed_genx = PAKshp_genx$perc_confirmed_genx # Associate GenX data
+  ) %>%
+  filter(perc_confirmed_genx > 0) # Remove areas with 0% GenX (no bubbles)
+
+# Create the map with simplified case detection categories and GenX bubbles
+map6 <- ggplot(data = PAKshp_genx) +
+  geom_sf(aes(fill = cdrcat), colour = "white", linewidth = 0.1) +
+  geom_sf(data = PAKreg, colour = '#3B3B3B', fill = NA, linewidth = 0.1) +
+  geom_point(
+    data = PAKshp_genx_centroids,
+    aes(x = X, y = Y, size = cut(perc_confirmed_genx, 
+                                 breaks = c(0, 20, 40, 60, 100, Inf), # 5 breaks
+                                 labels = c("20%", "40%", "60%", "80%+", "100%+"))), # 5 labels
+    color = "red", alpha = 0.7
+  ) +
+  scale_fill_manual(
+    name = "Case detection rate", 
+    values = c(
+      "0-20%" = "#ebebff", 
+      "20-40%" = "#bac9fe", 
+      "40-60%" = "#5974d6", 
+      "80%+" = "#002a80"
+    )
+  ) + 
+  scale_size_manual(
+    name = "GenX Testing (%)", 
+    values = c("20%" = 2, "40%" = 4, "60%" = 6, "100%+" = 8) # Set fixed bubble sizes
+  ) +
+  guides(size = guide_legend(override.aes = list(color = "red"))) + 
+  theme_dspp_cat()
+
+# Display the final simplified map
+map6
