@@ -55,7 +55,7 @@ theme_dspp_cat <- function() {
       legend.position = c(0.3, 0.80), # Top-left corner inside the plot
       legend.direction = "vertical", # Arrange legend items vertically
       legend.title = element_text(size = 26,  family = "roboto"),
-      legend.text = element_text(size = 16, family = "roboto"),
+      legend.text = element_text(size = 20, family = "roboto"),
       legend.key = element_rect(fill = "white", colour = "black"), # Proper key background
       legend.key.height = unit(0.5, "cm"), # Increase height for better visibility
       legend.key.width = unit(0.5, "cm"), # Keep width balanced
@@ -94,10 +94,12 @@ PAKreg <- PAKreg %>%
   inner_join(PAK, by = "region_id")
 
 #Creating categories for CDR and CDR_reg
-PAKshp$cdrcat <- cut(PAKshp$cdr, breaks=c(0, 0.25, 0.7, 1, Inf), 
-                     labels=c("<25%","25-70%","70-100%",">100%"))
-PAKshp$cdrregcat <- cut(PAKshp$cdr_reg, breaks=c(0, 0.25, 0.7, 1, Inf), 
-                        labels=c("<25%","25-70%","70-100%",">100%"))
+PAKshp$cdrcat <- cut( PAKshp$cdr, 
+                      breaks = c(-Inf, 0.2, 0.4, 0.6, Inf),  # Adjusted for simplified ranges
+                      labels = c("0-20%", "20-40%", "40-60%", "80%+"))
+PAKshp$cdrregcat <- cut(PAKshp$cdr_reg, 
+                        breaks = c(-Inf, 0.2, 0.4, 0.6, Inf),  # Adjusted for simplified ranges
+                        labels = c("0-20%", "20-40%", "40-60%", "80%+"))
 
 # calculating tb notification per 100k
 PAKshp$pop_size <- PAKshp$pop_1k * 1000  # Convert pop_1k to actual population size
@@ -127,9 +129,9 @@ map2 <- ggplot(data = PAKshp) +
   geom_sf(aes(fill = cdrcat), colour = "white", linewidth = 0.1) +
   geom_sf(data = PAKreg, colour = '#3B3B3B', fill = NA, linewidth = 0.1) +
   scale_fill_manual(
-    name = "Case detection rate", 
-    values = c("<25%"="#ebebff", "25-70%"="#bac9fe", 
-               "70-100%"="#5974d6", ">100%"="#002a80")
+    name = "Estimated case detection rate (2022)", 
+    values = c("0-20%"="#ebebff", "20-40%"="#bac9fe", 
+               "40-60%"="#5974d6", "80%+"="#002a80")
   ) + 
   theme_dspp_cat()
 map2
@@ -160,7 +162,7 @@ map3
 
 
 ##################################################################################
-################## 2. genX per district wrangling ###############################
+################## 2. genX per district wrangling ################################
 #################################################################################
 
 
@@ -318,10 +320,11 @@ PAKshp_genx <- PAKshp_simple %>%
 
 
 ##################################################################################
-################## 3. genX per district plot ####################################
+################## 4. Single indicators maps ####################################
 #################################################################################
 
-#Figure 4: new_relapse_tb_cases_tested_xpert2 ------------------------------------------- 
+
+#FIGURE 4:  new_relapse_tb_cases_tested_xpert2 (2018) -----------------------------------------------------------------------
 
 map4 <- ggplot(data = PAKshp_genx) +
   geom_sf(aes(fill = pmin(new_relapse_tb_cases_tested_xpert, 5000)), colour = "white", linewidth = 0.1) + 
@@ -337,17 +340,53 @@ map4 <- ggplot(data = PAKshp_genx) +
 
 apply_dspp (map4)
 
+#FIGURE 4B:  presumptive_tb_patients_tested_afb_or_genx (2018) -----------------------------------------------------------------------
+# Create categories for presumptive TB cases tested
+PAKshp_genx$tb_tested_category <- cut(
+  PAKshp_genx$presumptive_tb_patients_tested_afb_or_genx,
+  breaks = c(0, 1000, 5000, 10000, 20000, Inf), # Categories based on your distribution
+  labels = c("<1k", "1k–5k", "5k–10k", "10k–20k", "20k+"),
+  right = FALSE # Include lower boundary in the interval
+)
+
+# Plot map with categories
+map4b <- ggplot(data = PAKshp_genx) +
+  geom_sf(aes(fill = tb_tested_category), colour = "white", linewidth = 0.1) + 
+  geom_sf(data = PAKreg, colour = '#432818', fill = NA, linewidth = 0.1) +
+  scale_fill_manual(
+    name = "TB cases tested with GenX (2018)", 
+    values = c(
+      "<1k" = "#f7e1f6", 
+      "1k–5k" = "#d4b2d8", 
+      "5k–10k" = "#b484c8", 
+      "10k–20k" = "#9457b7", 
+      "20k+" = "#4e007e"
+    )
+  ) + 
+  theme_dspp_cat()
+
+map4b
+
 #ggsave("PAKISTAN_case_study_analysis/figures/map4_genxtesting_absolute.png", width = 10, height = 10, units = "cm", dpi = 300)
 
 
-
-#figure 5: % tested with genX --------------------------------------------------------
-
+##################################################################################
+################## 3. genX per district plot ####################################
+#################################################################################
+ 
 #new variable: percentage new_relapse_tb_cases_tested_xpert of confirmed_tb_cases_detected 
 PAKshp_genx$perc_confirmed_genx <- (PAKshp_genx$new_relapse_tb_cases_tested_xpert / PAKshp_genx$confirmed_tb_cases_detected) * 100
+PAKshp_genx$perc_total_genx <- (PAKshp_genx$new_relapse_tb_cases_tested_xpert / PAKshp_genx$grand_total_new_relapsed_cases) * 100
 
-#turn nan those > 100
+#perc_confirmed_genx shows the proportion of bacteriologically confirmed TB cases tested with GenX, focusing on diagnostic confirmation efficiency.
+#perc_total_genx shows the proportion of all new and relapsed TB cases (both confirmed and clinically diagnosed) tested with GenX, focusing on overall testing coverage.
+
+#FIGURE 5: % perc_confirmed_genx (2018) -----------------------------------------------------------------------------------------
+hist(pmin(PAKshp_genx$perc_confirmed_genx, 100), breaks = 20, col = "lightblue", border = "black",main = "Histogram of perc_confirmed_genx")
+
+#turn those above 100 to 100
 PAKshp_genx$perc_confirmed_genx[PAKshp_genx$perc_confirmed_genx > 100] <- 100
+
 map5 <- ggplot(data = PAKshp_genx) +
   geom_sf(aes(fill = cut(perc_confirmed_genx, 
                          breaks = c(-Inf, 0, 20, 40, 60, 80, Inf), 
@@ -355,7 +394,7 @@ map5 <- ggplot(data = PAKshp_genx) +
           colour = "white", linewidth = 0.1) + 
   geom_sf(data = PAKreg, colour = '#432818', fill = NA, linewidth = 0.1) +
   scale_fill_manual(
-    name = "Percentage of confirmed TB cases tested with GenX (2018)",
+    name = "Percentage of Confirmed TB Cases Tested Using GenX (2018)",
     values = c(
       "GenX not available" = "black",
       "1-20%" = "#ffccd5",
@@ -367,16 +406,40 @@ map5 <- ggplot(data = PAKshp_genx) +
 
 map5
 
-ggsave("PAKISTAN_case_study_analysis/figures/map5_genxtesting_perc.png", width = 15, height = 15, units = "cm", dpi = 300)
+#Figure 5b: % perc_total_genx (2018) -----------------------------------------------------------------------------------------
+hist(PAKshp_genx$perc_total_genx, breaks = 20, col = "lightblue", border = "black", main = "Histogram of perc_total_genx")
 
-#6. genX presence vs outcomes  --------------------------------------------------
+
+map5b <- ggplot(data = PAKshp_genx) +
+  geom_sf(aes(fill = cut(perc_total_genx, 
+                         breaks = c(-Inf, 0, 20, 40, 60, 80, Inf), 
+                         labels = c("GenX not available", "1-20%", "21-40%", "41-60%", "61-80%", "80%+"))), 
+          colour = "white", linewidth = 0.1) + 
+  geom_sf(data = PAKreg, colour = '#432818', fill = NA, linewidth = 0.1) +
+  scale_fill_manual(
+    name = "Percentage of All New & Relapsed TB Cases Tested Using GenX (2018)",
+    values = c(
+      "GenX not available" = "black",
+      "1-20%" = "#ffccd5",
+      "21-40%" = "#ff8fa3",
+      "41-60%" = "#ff4d6d",
+      "61-80%" = "#c9184a",
+      "80%+" = "#800f2f"
+    )) +  theme_dspp_cat()
+
+map5b
+
+#ggsave("PAKISTAN_case_study_analysis/figures/map5b_genxtestingtotal_perc.png", width = 20, height = 20, units = "cm", dpi = 300)
+
+
+#FIGURE 6: genX presence vs case detection rate  ----------------------------------------------------------
 
 # Create the Case Detection Rate (CDR) categories
 PAKshp_genx <- PAKshp_genx %>%
   mutate(cdrcat = cut(
     cdr, 
     breaks = c(-Inf, 0.2, 0.4, 0.6, Inf),  # Adjusted for simplified ranges
-    labels = c("0-20%", "20-40%", "40-60%", "80%+") # Fixed labels
+    labels = c("0-20%", "20-40%", "40-60%", "80%+")  # Fixed labels
   ))
 
 # Extract centroids for GenX bubbles
@@ -386,23 +449,25 @@ PAKshp_genx_centroids <- PAKshp_genx %>%
   as.data.frame() %>%
   mutate(
     district = PAKshp_genx$district_pakregfile,  # Keep district name
-    perc_confirmed_genx = PAKshp_genx$perc_confirmed_genx # Associate GenX data
+    perc_confirmed_genx = PAKshp_genx$perc_confirmed_genx, # Associate GenX data
+    cdrcat = PAKshp_genx$cdrcat # Associate CDR data
   ) %>%
   filter(perc_confirmed_genx > 0) # Remove areas with 0% GenX (no bubbles)
 
-# Create the map with simplified case detection categories and GenX bubbles
+#plot map
 map6 <- ggplot(data = PAKshp_genx) +
   geom_sf(aes(fill = cdrcat), colour = "white", linewidth = 0.1) +
   geom_sf(data = PAKreg, colour = '#3B3B3B', fill = NA, linewidth = 0.1) +
   geom_point(
-    data = PAKshp_genx_centroids,
+    data = PAKshp_genx_centroids %>% 
+      filter(perc_confirmed_genx >= 40), # Exclude values less than 40%
     aes(x = X, y = Y, size = cut(perc_confirmed_genx, 
-                                 breaks = c(0, 20, 40, 60, 100, Inf), # 5 breaks
-                                 labels = c("20%", "40%", "60%", "80%+", "100%+"))), # 5 labels
-    color = "red", alpha = 0.7
+                                 breaks = c(40, 60, 80, Inf), # New breaks
+                                 labels = c("40-60%", "60-80%", "80%+"))), # New labels
+    color = "red", alpha = 0.5
   ) +
   scale_fill_manual(
-    name = "Case detection rate", 
+    name = "Estimated case detection rate", 
     values = c(
       "0-20%" = "#ebebff", 
       "20-40%" = "#bac9fe", 
@@ -411,11 +476,76 @@ map6 <- ggplot(data = PAKshp_genx) +
     )
   ) + 
   scale_size_manual(
-    name = "GenX Testing (%)", 
-    values = c("20%" = 2, "40%" = 4, "60%" = 6, "100%+" = 8) # Set fixed bubble sizes
+    name = "Percentage of confirmed TB cases tested with GenX", 
+    values = c("40-60%" = 2, "60-80%" = 4, "80%+" = 8) # Adjust bubble sizes
   ) +
   guides(size = guide_legend(override.aes = list(color = "red"))) + 
   theme_dspp_cat()
-
-# Display the final simplified map
 map6
+
+#ggsave("PAKISTAN_case_study_analysis/figures/map6_genx_cdr.png", width = 20, height = 20, units = "cm", dpi = 300)
+
+#FIGURE 6b: GenX dummy vs case detection (inverted) -------------------------------------------------------------
+
+# Add a dummy for GenX presence (yes/no)
+PAKshp_genx <- PAKshp_genx %>%
+  mutate(genx_presence = ifelse(perc_confirmed_genx >= 10, "Gen X Available", "GenX not Available"))
+  #mutate(genx_presence = ifelse(perc_confirmed_genx >= 50, "Above 50%", "Below 50% or no Genx presence"))
+  
+
+# Base map with GenX presence
+map6b <- ggplot(data = PAKshp_genx) +
+  geom_sf(aes(fill = genx_presence), colour = "white", linewidth = 0.1) +
+  geom_sf(data = PAKreg, colour = '#3B3B3B', fill = NA, linewidth = 0.1) +
+  geom_point(
+    data = PAKshp_genx_centroids %>% 
+      filter(cdrcat != "0-20%"), # Exclude "0-20%" category
+    aes(x = X, y = Y, size = cdrcat, color = cdrcat), # Use cdrcat directly
+    color = "#ff9b5c", alpha = 0.75
+  ) +
+  # Define the palette for GenX presence
+  scale_fill_manual(
+    name = "Confirmed TB cases tested with GenX",
+    values = c("Gen X Available" = "#5974d6", "GenX not Available" = "#edede9")
+  ) +
+  # Define bubble sizes for CDR categories
+  scale_size_manual(
+    name = "Case Detection Rate (CDR)",
+    values = c("20-40%" = 2, "40-60%" =4 , "80%+" = 8)
+  ) + 
+  # Adjust theme
+  theme_dspp_cat() 
+  
+# Display the inverted map
+map6b
+#ggsave("PAKISTAN_case_study_analysis/figures/map8_genx_cdr_inverted_yesno.png", width = 20, height =20, units = "cm", dpi = 300)
+
+
+#FIGURE 7 (SCATTER PLOT) - genX presence vs case detection rate ------------------------------------------------
+#turn those above 100 to 100
+
+scatter1 <- ggplot(PAKshp_genx, aes(x = cdr, y = perc_confirmed_genx)) +
+  geom_point(color = "#002a80", size = 3, alpha = 0.6) +  # Fixed color & size 
+  geom_smooth(method = "lm", color = "black", linetype = "dashed", size = 0.5) + # Add trend line
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2), name = "Case Detection Rate (CDR)") +
+  scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 20), name = "GenX Testing (%)") +
+  labs(
+    title = "Case Detection Rate (CDR) vs. GenX Testing (%)",
+    x = "Case Detection Rate (CDR)",
+    y = "Percentage of Confirmed TB Cases Tested with GenX"
+  ) + 
+  theme_minimal() +
+  theme(plot.title = element_text(size = 30, family = "roboto"),
+        axis.title = element_text(size = 30, family = "roboto"),
+        axis.text = element_text(size = 30, family = "roboto"),
+        panel.background = element_rect(fill = "white", colour = NA))
+
+scatter1
+ggsave("PAKISTAN_case_study_analysis/figures/scatter1_genx_cdr.png", width = 15, height = 10, units = "cm", dpi = 300)
+
+
+##################################################################################
+################## 4. genX per province #########################################
+#################################################################################
+
+

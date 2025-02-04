@@ -1,0 +1,86 @@
+﻿year,province,N Modules,Gxpert Sites,Gxpert Machine,Connected to GxAlert (%),Total Tests Done,MTB Positive Rate (%)
+2022,Punjab,1238,186,186,92,275809,25.9
+2022,Sindh,694,106,106,95,195749,19.5
+2022,Khyber Pakhtunkhwa,282,48,48,75,54896,21.3
+2022,Balochistan,164,34,34,88,18912,25.9
+2022,Azad Jammu & Kashmir,50,11,11,91,15896,15.1
+2022,Gilgit-Baltistan,48,12,12,75,5064,8.7
+2022,Islamabad & CT,58,7,7,86,19250,14.5
+2021,Punjab,1160,168,186,92,147658,35.9
+2021,Sindh,646,95,106,95,109634,26.1
+2021,Khyber Pakhtunkhwa,252,44,48,75,36814,28.4
+2021,Balochistan,152,33,34,88,14783,28.7
+2021,Azad Jammu & Kashmir,46,10,11,91,10769,17.3
+2021,Gilgit-Baltistan,48,12,12,75,3721,9.8
+2021,Islamabad & CT,52,7,7,86,14519,17.8
+2020,Punjab,1136,156,186,92,97296,39.9
+2020,Sindh,636,95,106,95,84308,25.8
+2020,Khyber Pakhtunkhwa,228,38,48,75,27556,24.9
+2020,Balochistan,152,33,34,88,12491,21
+2020,Azad Jammu & Kashmir,44,10,11,91,7585,16.6
+2020,Gilgit-Baltistan,48,12,12,75,3111,7.5
+2020,Islamabad & CT,52,6,7,86,8917,20.1
+2019,Punjab,1068,131,186,92,105463,28.1
+2019,Sindh,632,94,106,95,114848,22.2
+2019,Khyber Pakhtunkhwa,224,37,48,75,31326,22.7
+2019,Balochistan,144,31,34,88,17177,24.8
+2019,Azad Jammu & Kashmir,44,10,11,91,9967,13
+2019,Gilgit-Baltistan,48,10,12,75,4963,7.1
+2019,Islamabad & CT,52,6,7,86,12862,16.7
+2018,Punjab,856,88,,,88147,27.4
+2018,Sindh,568,81,,,83871,26.1
+2018,Khyber Pakhtunkhwa,192,33,,,23591,28.7
+2018,Balochistan,92,18,,,4917,31.1
+2018,Azad Jammu & Kashmir,44,10,,,8808,14.9
+2018,Gilgit-Baltistan,40,3,,,1174,14.2
+2018,Islamabad & CT,52,5,,,13362,19.7
+2017,Punjab,392,41,,,50093,36.9
+2017,Sindh,360,24,,,56375,27.3
+2017,Khyber Pakhtunkhwa,104,21,,,13795,36.3
+2017,Balochistan,40,6,,,4938,37.7
+2017,Azad Jammu & Kashmir,44,10,,,4415,19.9
+2017,Gilgit-Baltistan,12,1,,,103,17.5
+2017,Islamabad & CT,48,2,,,12960,19.7
+2016,Punjab,100,17,,,24473,46.9
+2016,Sindh,72,10,,,16741,55.3
+2016,Khyber Pakhtunkhwa,68,17,,,9195,37.4
+2016,Balochistan,12,2,,,2116,44.2
+2016,Azad Jammu & Kashmir,16,4,,,778,35.9
+2016,Gilgit-Baltistan,4,1,,,40,17.5
+2016,Islamabad & CT,36,1,,,12787,23.4
+2015,Punjab,68,14,,,,
+2015,Sindh,36,7,,,,
+2015,Khyber Pakhtunkhwa,48,10,,,,
+2015,Balochistan,8,1,,,,
+2015,Azad Jammu & Kashmir,4,1,,,,
+2015,Gilgit-Baltistan,4,0,,,,
+2015,Islamabad & CT,20,1,,,,
+2014,Punjab,44,9,,,,
+2014,Sindh,36,7,,,,
+2014,Khyber Pakhtunkhwa,44,10,,,,
+2014,Balochistan,8,1,,,,
+2014,Azad Jammu & Kashmir,4,1,,,,
+2014,Gilgit-Baltistan,4,0,,,,
+2014,Islamabad & CT,16,1,,,,
+2013,Punjab,28,6,,,,
+2013,Sindh,16,3,,,,
+2013,Khyber Pakhtunkhwa,40,10,,,,
+2013,Balochistan,4,1,,,,
+2013,Azad Jammu & Kashmir,4,1,,,,
+2013,Gilgit-Baltistan,0,0,,,,
+2013,Islamabad & CT,4,1,,,,
+2012,Punjab,24,6,,,,
+2012,Sindh,12,3,,,,
+2012,Khyber Pakhtunkhwa,8,2,,,,
+2012,Balochistan,4,1,,,,
+2012,Azad Jammu & Kashmir,4,1,,,,
+2012,Gilgit-Baltistan,0,0,,,,
+2012,Islamabad & CT,4,1,,,,
+2011,Punjab,20,5,,,,
+2011,Punjab,20,5,,,,
+2011,Sindh,12,3,,,,
+2011,Khyber Pakhtunkhwa,4,1,,,,
+2011,Balochistan,0,1,,,,
+2011,Azad Jammu & Kashmir,4,1,,,,
+2011,Gilgit-Baltistan,0,0,,,,
+2011,Islamabad & CT,4,1,,,,
