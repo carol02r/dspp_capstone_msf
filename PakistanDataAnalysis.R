@@ -7,6 +7,7 @@ library(RColorBrewer)
 library(readr)
 library(showtext)
 library(stringdist)
+library(ggrepel)
 
 
 #0. Defining style ========================================
@@ -523,7 +524,6 @@ map6b
 
 #FIGURE 7 (SCATTER PLOT) - genX presence vs case detection rate ------------------------------------------------
 #turn those above 100 to 100
-
 scatter1 <- ggplot(PAKshp_genx, aes(x = cdr, y = perc_confirmed_genx)) +
   geom_point(color = "#002a80", size = 3, alpha = 0.6) +  # Fixed color & size 
   geom_smooth(method = "lm", color = "black", linetype = "dashed", size = 0.5) + # Add trend line
@@ -541,11 +541,126 @@ scatter1 <- ggplot(PAKshp_genx, aes(x = cdr, y = perc_confirmed_genx)) +
         panel.background = element_rect(fill = "white", colour = NA))
 
 scatter1
-ggsave("PAKISTAN_case_study_analysis/figures/scatter1_genx_cdr.png", width = 15, height = 10, units = "cm", dpi = 300)
+#ggsave("PAKISTAN_case_study_analysis/figures/scatter1_genx_cdr.png", width = 15, height = 10, units = "cm", dpi = 300)
+
+#INTERATING TO HIGHLIGHT EACH PROVINCE -------------------------------------------------------------------
+
+# Get unique regions (excluding NA and Islamabad)
+regions <- PAKshp_genx %>%
+  filter(!is.na(region) & region != "Islamabad") %>%
+  pull(region) %>%
+  unique()
+
+# Function to create a scatter plot for each region
+create_region_plot <- function(region_name) {
+  
+  PAKshp_genx <- PAKshp_genx %>%
+    mutate(region_highlight = ifelse(region == region_name, "Highlight", "Other"))  # Mark selected region
+  
+  ggplot(PAKshp_genx, aes(x = cdr, y = perc_confirmed_genx)) +
+    geom_point(aes(color = region_highlight), size = 3, alpha = 1) +  # Highlighted region in orange
+    geom_smooth(method = "lm", color = "#ffb67e", linetype = "dashed", size = 0.5, se = FALSE) +
+    scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2), name = "Case Detection Rate (CDR)") +
+    scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 20), name = "GenX Testing (%)") +
+    scale_color_manual(values = c("Highlight" = "#ffb67e", "Other" = "#adb5bd")) +  # Color scheme
+    labs(
+      title = paste("CDR vs. GenX Testing -", region_name),
+      x = "Case Detection Rate (CDR)",
+      y = "Percentage of Confirmed TB Cases Tested with GenX"
+    ) + 
+    theme_minimal()+
+    theme(plot.title = element_text(size = 25, family = "roboto"),
+          axis.title = element_text(size = 25, family = "roboto"),
+          axis.text = element_text(size = 20, family = "roboto"),
+          axis.title.y = element_text(angle = 90),  # Ensure y-axis title is vertical
+          legend.position = "none",
+          panel.background = element_rect(fill = "white", colour = NA)) 
+}
+
+# Create and save each plot
+plots <- map(regions, create_region_plot)
+
+# Display the first plot as an example
+plots[[1]]
+ 
+walk2(plots, regions, ~ggsave(filename = paste0("PAKISTAN_case_study_analysis/figures/scatter_", .y, ".png"),
+                              plot = .x, width = 15, height = 10, units = "cm", dpi = 300))
 
 
+    
 ##################################################################################
 ################## 4. genX per province #########################################
 #################################################################################
+
+#Creating a province shapefile based on PAKshp (district)
+PAKshp_region <- PAKshp %>%
+  group_by(region) %>%  # Group by region
+  summarize(geometry = st_union(geometry), .groups = "drop") 
+
+#reading URL with province level data for 2022: https://raw.githubusercontent.com/carol02r/dspp_capstone_msf/refs/heads/main/PAKISTAN_cleaned_data_reports_papers/province_level/province_diagnosis_2022.csv
+url <- "https://raw.githubusercontent.com/carol02r/dspp_capstone_msf/refs/heads/main/PAKISTAN_cleaned_data_reports_papers/province_level/province_diagnosis_2022.csv"
+PAKprov <- read_csv(url)
+
+#drop region - pakistan; and rename Khyber Pakhtunkhwa to Khyber Pakhtun Khwa; Azad Jammu & Kashmir to Azad Jammu and Kashmir
+PAKprov <- PAKprov %>%
+  filter(province != "Pakistan") %>%  # Remove the Pakistan region
+  mutate(province = recode(province,
+                         "Khyber Pakhtunkhwa" = "Khyber Pakhtun Khwa",
+                         "Azad Jammu & Kashmir" = "Azad Jammu and Kashmir",
+                         "Islamabad & CT" = "Islamabad"))  
+
+# and merge with PAKshp_region shapefile
+PAKshp_region <- PAKshp_region %>%
+  left_join(PAKprov, by = c("region" = "province"))
+
+#MAP 9 - genexpert_sites_connected ---------------------------------------------------
+#other variables:
+
+#genexpert_sites_connected
+#total_modules_connected
+#yearly_utilization_percent
+#avg_tests_per_day
+#yearly_utilization_percent
+#mtb_positivity_rate_percent
+#avg_population_per_centre
+#population_coverage_per_module_sourcelabreport
+#percent_gxalert_connected_sourcelabreport
+
+# Calculate centroids of each region for bubble placement
+
+PAKshp_region_centroids <- PAKshp_region %>%
+  st_centroid() %>%
+  st_coordinates() %>%
+  as.data.frame() %>%
+  mutate(region = PAKshp_region$region, 
+         genexpert_sites_connected = PAKshp_region$genexpert_sites_connected,
+         yearly_utilization_percent = PAKshp_region$yearly_utilization_percent,
+         population_coverage_per_module_sourcelabreport = PAKshp_region$population_coverage_per_module_sourcelabreport)
+  
+# Plot with bubbles, labels, and region names
+map9 <- ggplot(PAKshp_region) +
+  geom_sf(fill = "#ede0d4", color = "#432818", linewidth = 0.1) +  # Base map
+  # Bubbles for GenXpert sites
+  geom_point(data = PAKshp_region_centroids, aes(X, Y, size = population_coverage_per_module_sourcelabreport), 
+             color = "#889eec", alpha = 0.5) +  
+  # Labels for GenXpert site counts
+  geom_text(data = PAKshp_region_centroids, aes(X, Y, label = population_coverage_per_module_sourcelabreport), 
+            size = 4, color = "black", fontface = "bold") +  
+  # Labels for region names (non-overlapping)
+  geom_text_repel(data = PAKshp_region_centroids, aes(X, Y, label = region),  
+                  size = 5, color = "#002a80", fontface = "bold",
+                  box.padding = 0.5, point.padding = 3, force = 0.5) +  
+  # Remove legend
+  scale_size(range = c(2, 10), guide = "none") +
+  #add title
+  labs(title = "population_coverage_per_module_sourcelabreportin 2022 by Province") +
+  theme_dspp() +
+  theme(
+    plot.title = element_text(size = 20, family = "roboto"))
+
+map9
+
+ggsave("PAKISTAN_case_study_analysis/figures/map9_genx_pop_covered_prov.png", width = 10, height = 10, units = "cm", dpi = 300)
+
 
 
