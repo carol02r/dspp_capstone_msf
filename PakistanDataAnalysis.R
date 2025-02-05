@@ -627,6 +627,7 @@ PAKshp_region <- PAKshp_region %>%
 #percent_gxalert_connected_sourcelabreport
 
 # Calculate centroids of each region for bubble placement
+#colors: #889eec #002a80 (blue)
 
 PAKshp_region_centroids <- PAKshp_region %>%
   st_centroid() %>%
@@ -635,32 +636,120 @@ PAKshp_region_centroids <- PAKshp_region %>%
   mutate(region = PAKshp_region$region, 
          genexpert_sites_connected = PAKshp_region$genexpert_sites_connected,
          yearly_utilization_percent = PAKshp_region$yearly_utilization_percent,
-         population_coverage_per_module_sourcelabreport = PAKshp_region$population_coverage_per_module_sourcelabreport)
+         population_coverage_per_module_sourcelabreport = PAKshp_region$population_coverage_per_module_sourcelabreport,
+         avg_population_per_centre = PAKshp_region$avg_population_per_centre) 
   
 # Plot with bubbles, labels, and region names
 map9 <- ggplot(PAKshp_region) +
   geom_sf(fill = "#ede0d4", color = "#432818", linewidth = 0.1) +  # Base map
   # Bubbles for GenXpert sites
-  geom_point(data = PAKshp_region_centroids, aes(X, Y, size = population_coverage_per_module_sourcelabreport), 
-             color = "#889eec", alpha = 0.5) +  
+  geom_point(data = PAKshp_region_centroids, aes(X, Y, size = avg_population_per_centre), 
+             color = "#adc178", alpha = 0.5) +  
   # Labels for GenXpert site counts
-  geom_text(data = PAKshp_region_centroids, aes(X, Y, label = population_coverage_per_module_sourcelabreport), 
+  geom_text(data = PAKshp_region_centroids, aes(X, Y, label = avg_population_per_centre), 
             size = 4, color = "black", fontface = "bold") +  
   # Labels for region names (non-overlapping)
   geom_text_repel(data = PAKshp_region_centroids, aes(X, Y, label = region),  
-                  size = 5, color = "#002a80", fontface = "bold",
+                  size = 5, color = "#3a5a40", fontface = "bold",
                   box.padding = 0.5, point.padding = 3, force = 0.5) +  
   # Remove legend
-  scale_size(range = c(2, 10), guide = "none") +
+  scale_size(range = c(2, 12), guide = "none") +
   #add title
-  labs(title = "population_coverage_per_module_sourcelabreportin 2022 by Province") +
+  labs(title = "avg_population_per_centre 2022 by Province") +
   theme_dspp() +
   theme(
     plot.title = element_text(size = 20, family = "roboto"))
 
 map9
 
-ggsave("PAKISTAN_case_study_analysis/figures/map9_genx_pop_covered_prov.png", width = 10, height = 10, units = "cm", dpi = 300)
+ggsave("PAKISTAN_case_study_analysis/figures/map9b_centre_pop_covered_prov.png", width = 10, height = 10, units = "cm", dpi = 300)
 
+
+
+##### FIGURE 10: Bubble plot: Case Detection Rate vs Utilisation Rate (sized by number of GenX)  ---------------------------------------------------
+
+#reading estimates data 2022 (lab report): https://raw.githubusercontent.com/carol02r/dspp_capstone_msf/refs/heads/main/PAKISTAN_cleaned_data_reports_papers/province_level/province_estimates_notifications_2022.csv
+url <- "https://raw.githubusercontent.com/carol02r/dspp_capstone_msf/refs/heads/main/PAKISTAN_cleaned_data_reports_papers/province_level/province_estimates_notifications_2022.csv"
+PAKprov_estimates <- read_csv(url)
+
+
+#Drop pakistan, and rename: Azad Jammu & Kashmir to Azad Jammu and Kashmir, Khyber Pakhtunkhwa to Khyber Pakhtun Khwa; 	Islamabad & CT to Islamabad
+PAKprov_estimates <- PAKprov_estimates %>%
+  select(-year) %>%
+  filter(province != "Pakistan") %>% 
+  mutate(province = recode(province,
+                         "Khyber Pakhtunkhwa" = "Khyber Pakhtun Khwa",
+                         "Azad Jammu & Kashmir" = "Azad Jammu and Kashmir",
+                         "Islamabad & CT" = "Islamabad"))
+
+#merge with PAKshp_region shapefile
+PAKshp_region <- PAKshp_region %>%
+  left_join(PAKprov_estimates, by = c("region" = "province"))
+
+#trasnform case_detection_rate from 47% to 47
+PAKshp_region$case_detection_rate <- as.numeric(gsub("%", "", PAKshp_region$case_detection_rate))
+PAKshp_region$ppm_contribution <- as.numeric(gsub("%", "", PAKshp_region$ppm_contribution))
+
+#bubble plot with case_detection_rate vs yearly_utilization_percent sized by genexpert_sites_connected
+#bubble plot with case_detection_rate vs ppm_contribution sized by genexpert_sites_connected
+
+fig10 <- ggplot(PAKshp_region, aes(x = case_detection_rate, y = ppm_contribution)) +
+  geom_point(aes(size = genexpert_sites_connected), color = "#002a80", alpha = 0.6) +  # Bubbles sized by GenX sites
+  geom_text_repel(aes(label = region), size = 3, color = "#002a80", fontface = "bold", 
+                  box.padding = 0.5, point.padding = 0.5, force = 2) +  # Labels for provinces
+  scale_size_continuous(range = c(3, 10), name = "GenXpert Sites Connected") +  # Adjust bubble sizes
+  scale_x_continuous(name = "Case Detection Rate (CDR)", limits = c(0, 100), breaks = seq(0, 100, 20)) +
+  scale_y_continuous(name = "ppm_contribution (%)", limits = c(0, 100), breaks = seq(0, 100, 20)) +
+  labs(title = "Case Detection Rate vs. ppm_contribution",
+       subtitle = "Bubble size represents the number of GenXpert sites connected") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 20, family = "roboto"),
+        plot.subtitle = element_text(size = 16, family = "roboto"),
+        axis.title = element_text(size = 18, family = "roboto"),
+        axis.text = element_text(size = 14, family = "roboto"),
+        legend.title = element_text(size = 16, family = "roboto"),
+        legend.text = element_text(size = 14, family = "roboto"),
+        panel.background = element_rect(fill = "white", colour = NA))
+
+fig10
+
+ggsave("PAKISTAN_case_study_analysis/figures/fig10b_bubble_ppm_cdr_utilisation.png", width = 12, height = 8, units = "cm", dpi = 300)
+
+##################################################################################
+################## 5. Provinces TimeSeries ######################################
+#################################################################################
+
+#read url: https://raw.githubusercontent.com/carol02r/dspp_capstone_msf/refs/heads/main/PAKISTAN_cleaned_data_reports_papers/province_level/province_diagnosis_ts.csv
+url <- "https://raw.githubusercontent.com/carol02r/dspp_capstone_msf/refs/heads/main/PAKISTAN_cleaned_data_reports_papers/province_level/province_diagnosis_ts.csv"
+PAKprov_ts <- read_csv(url)
+
+# Create new variable: Total Tests per GenXpert Site
+PAKprov_ts <- PAKprov_ts %>%
+  mutate(tests_per_site = `Total Tests Done` / `Gxpert Sites`)
+
+# Scatter plot without size scaling
+fig11 <- ggplot(PAKprov_ts,aes(x = pmin(tests_per_site, 5000), y = `MTB Positive Rate (%)`, color = province)) +
+  geom_point(size = 3, alpha = 0.7) +  # Fixed size, colored by province
+  scale_x_continuous(name = "Total Tests per GenXpert Site") +
+  scale_y_continuous(name = "MTB Positive Rate (%)", limits = c(0, 60), breaks = seq(0, 60, 10)) +
+  labs(title = "Tests per GenXpert Site vs. MTB Positive Rate",
+       subtitle = "Each point represents a province-year combination",
+       caption = "Data from PAKprov_ts (2011-2022)") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 20, family = "roboto"),
+        plot.subtitle = element_text(size = 16, family = "roboto"),
+        axis.title = element_text(size = 18, family = "roboto"),
+        axis.text = element_text(size = 14, family = "roboto"),
+        legend.title = element_text(size = 16, family = "roboto"),
+        legend.text = element_text(size = 14, family = "roboto"))
+
+fig11
+
+ggsave("PAKISTAN_case_study_analysis/figures/fig11_scatter_tests_per_site.png", width = 12, height = 8, units = "cm", dpi = 300)
+
+
+##################################################################################
+################## 6. Other descriptive figures #################################
+#################################################################################
 
 
