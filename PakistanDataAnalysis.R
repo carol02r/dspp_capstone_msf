@@ -752,4 +752,11 @@ ggsave("PAKISTAN_case_study_analysis/figures/fig11_scatter_tests_per_site.png", 
 ################## 6. Other descriptive figures #################################
 #################################################################################
 
+#Figure 12: Time Series of MTB positity rate (private vs public) ---------------------------------------------------
+url <- "https://raw.githubusercontent.com/carol02r/dspp_capstone_msf/refs/heads/main/PAKISTAN_cleaned_data_reports_papers/country_level/country_diagnosis_labreport_ts.csv"
+PAKts <- read_csv(url)
 
+#summary
+summary(PAKts)
+
+#remove % and turn numeric: 
