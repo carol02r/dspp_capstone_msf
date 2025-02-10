@@ -16,6 +16,7 @@ library(ggrepel)
 font_add_google("Roboto", "roboto")
 showtext_auto()
 
+
 #defining capstone theme
 theme_dspp <- function() {
   theme_void() + 
@@ -46,6 +47,7 @@ apply_dspp <- function(plot) {
     theme_dspp()
 }
 
+#for categorical maps
 theme_dspp_cat <- function() {
   theme_void() + 
     theme(
@@ -66,7 +68,26 @@ theme_dspp_cat <- function() {
     )
 }
 
+#for time-series
 
+theme_dspp_ts <- function() {
+  theme_minimal() + 
+    theme(
+      panel.grid.major.y = element_line(color = "grey90", size = 0.1),  # Keep horizontal grid lines
+      panel.grid.major.x = element_line(color = "grey90", size = 0.1),  # Keep horizontal grid lines
+      panel.grid.minor = element_blank(),  # Remove minor grid lines
+      panel.background = element_rect(fill = "white", colour = NA), 
+      plot.background = element_rect(fill = "white", colour = NA),
+      legend.position = "top",  # Place legend at the top
+      legend.title = element_text(size = 16, family = "roboto"),
+      legend.text = element_text(size = 16, family = "roboto"),
+      legend.key.width = unit(1, 'cm'),
+      legend.key.height = unit(0.5, 'cm'),
+      legend.spacing.x = unit(0.5, 'cm'),
+      legend.box.margin = margin(t = 0, r = 10, b = 0, l = 0),
+      legend.margin = margin(t = 5, r = 10, b = 5, l = 10)
+    )
+}
 
 ###############################################################################################################
 ################## 1. Pakistan map - estimates, cases and health facilities 2022 ##############################
@@ -638,32 +659,39 @@ PAKshp_region_centroids <- PAKshp_region %>%
          yearly_utilization_percent = PAKshp_region$yearly_utilization_percent,
          population_coverage_per_module_sourcelabreport = PAKshp_region$population_coverage_per_module_sourcelabreport,
          avg_population_per_centre = PAKshp_region$avg_population_per_centre) 
-  
+
+#merge with PAKprov_estimates
+PAKshp_region_centroids <- PAKshp_region_centroids %>%
+  left_join(PAKprov_estimates, by = c("region" = "province"))
+
+#remove % from missed_cases_percent:
+PAKshp_region_centroids$missed_cases_percent <- as.numeric(gsub("%", "", PAKshp_region_centroids$missed_cases_percent))
+
+
 # Plot with bubbles, labels, and region names
-map9 <- ggplot(PAKshp_region) +
+map9c <- ggplot(PAKshp_region) +
   geom_sf(fill = "#ede0d4", color = "#432818", linewidth = 0.1) +  # Base map
   # Bubbles for GenXpert sites
-  geom_point(data = PAKshp_region_centroids, aes(X, Y, size = avg_population_per_centre), 
-             color = "#adc178", alpha = 0.5) +  
+  geom_point(data = PAKshp_region_centroids, aes(X, Y, size = missed_cases_percent), 
+             color = "#889eec", alpha = 0.5) +  
   # Labels for GenXpert site counts
-  geom_text(data = PAKshp_region_centroids, aes(X, Y, label = avg_population_per_centre), 
+  geom_text(data = PAKshp_region_centroids, aes(X, Y, label = missed_cases_percent), 
             size = 4, color = "black", fontface = "bold") +  
   # Labels for region names (non-overlapping)
   geom_text_repel(data = PAKshp_region_centroids, aes(X, Y, label = region),  
-                  size = 5, color = "#3a5a40", fontface = "bold",
+                  size = 5, color = "#002a80", fontface = "bold",
                   box.padding = 0.5, point.padding = 3, force = 0.5) +  
   # Remove legend
-  scale_size(range = c(2, 12), guide = "none") +
+  scale_size(range = c(5, 12), guide = "none") +
   #add title
-  labs(title = "avg_population_per_centre 2022 by Province") +
+  labs(title = "missed_cases_percent 2022 by Province") +
   theme_dspp() +
   theme(
     plot.title = element_text(size = 20, family = "roboto"))
 
-map9
+map9c
 
-ggsave("PAKISTAN_case_study_analysis/figures/map9b_centre_pop_covered_prov.png", width = 10, height = 10, units = "cm", dpi = 300)
-
+ggsave("PAKISTAN_case_study_analysis/figures/map9c_missed_cases_percent.png", width = 10, height = 10, units = "cm", dpi = 300)
 
 
 ##### FIGURE 10: Bubble plot: Case Detection Rate vs Utilisation Rate (sized by number of GenX)  ---------------------------------------------------
@@ -752,6 +780,7 @@ ggsave("PAKISTAN_case_study_analysis/figures/fig11_scatter_tests_per_site.png", 
 ################## 6. Other descriptive figures #################################
 #################################################################################
 
+
 #Figure 12: Time Series of MTB positity rate (private vs public) ---------------------------------------------------
 url <- "https://raw.githubusercontent.com/carol02r/dspp_capstone_msf/refs/heads/main/PAKISTAN_cleaned_data_reports_papers/country_level/country_diagnosis_labreport_ts.csv"
 PAKts <- read_csv(url)
@@ -759,4 +788,148 @@ PAKts <- read_csv(url)
 #summary
 summary(PAKts)
 
-#remove % and turn numeric: 
+#remove % and turn numeric: mtb_positive_percent_public and mtb_positive_percent_private
+PAKts$mtb_positive_percent_public <- as.numeric(gsub("%", "", PAKts$mtb_positive_percent_public))
+PAKts$mtb_positive_percent_private <- as.numeric(gsub("%", "", PAKts$mtb_positive_percent_private))
+PAKts$yearly_utilization_percent <- as.numeric(gsub("%", "", PAKts$yearly_utilization_percent))
+
+#plot time series of both public and private mtb positivity rate
+fig12 <- ggplot(PAKts, aes(x = year)) +
+  geom_line(aes(y = mtb_positive_percent_public, color = "Public"), size = 0.5) +
+  geom_line(aes(y = mtb_positive_percent_private, color = "Private"), size = 0.5) +
+  
+  # Add markers at data points
+  geom_point(aes(y = mtb_positive_percent_public, color = "Public"), size = 1) +
+  geom_point(aes(y = mtb_positive_percent_private, color = "Private"), size = 1) +
+  
+  # Custom colors: Blue for public, Red for private
+  scale_color_manual(name = NULL, values = c("Public" = "#adc178", "Private" = "#ff9b5c")) +
+  
+  # Ensure x-axis is rounded & shows all years
+  scale_x_continuous(name = NULL, 
+                   limits = c(2014, max(PAKts$year)),  # Start at first data year
+                   breaks = seq(2014, max(PAKts$year), 1),  # Show all years
+                   expand = c(0, 0)) +  # Remove extra padding
+  
+  # Y-axis adjustments
+  scale_y_continuous(name = "MTB Positive Rate (%)", limits = c(0, 60), breaks = seq(0, 60, 10)) +
+  
+  # Titles and styling
+  labs(title = "Time Series of MTB Positive Rate (Public vs. Private)")+ 
+  theme_dspp_ts() +
+  theme(plot.title = element_text(size = 20, family = "roboto"),
+        axis.title = element_text(size = 20, family = "roboto"),
+        axis.text = element_text(size = 18, family = "roboto"))
+
+fig12
+
+ggsave("PAKISTAN_case_study_analysis/figures/fig12_ts_mtb_positivity_rate.png", width = 8, height = 6, units = "cm", dpi = 300)
+
+
+#Figure 13: Time Series of genX available (private vs public) ---------------------------------------------------
+#time series: total_genex_results, xpert_total_tests_public, xpert_total_tests_private
+
+#plot time series of both public and private mtb positivity rate
+fig13 <- ggplot(PAKts, aes(x = year)) +
+  geom_line(aes(y = xpert_total_tests_public, color = "Public"), size = 0.5) +
+  geom_line(aes(y = xpert_total_tests_private, color = "Private"), size = 0.5) +
+  
+  
+  # Add markers at data points
+  geom_point(aes(y = xpert_total_tests_public, color = "Public"), size = 1) +
+  geom_point(aes(y = xpert_total_tests_private, color = "Private"), size = 1) +
+  
+  # Custom colors: Blue for public, Red for private
+  scale_color_manual(name = NULL, values = c("Public" = "#adc178", "Private" = "#ff9b5c")) +
+  
+  # Ensure x-axis is rounded & shows all years
+  scale_x_continuous(name = NULL, 
+                     limits = c(2014, max(PAKts$year)),  # Start at first data year
+                     breaks = seq(2014, max(PAKts$year), 1),  # Show all years
+                     expand = c(0, 0)) +  # Remove extra padding
+  
+  # Y-axis adjustments
+  scale_y_continuous(name = "Xpert Total Tests (in thousands)", 
+                     limits = c(0, 600000),  # Adjust based on your max value
+                     breaks = seq(0, 600000, 100000),  # Set intervals in thousands
+                     labels = scales::label_comma(scale = 0.001)) + # Convert to thousands
+  
+  # Titles and styling
+  labs(title = "Time Series of GenX Tests Performed (Public vs. Private)")+ 
+  theme_dspp_ts() +
+  theme(plot.title = element_text(size = 20, family = "roboto"),
+        axis.title = element_text(size = 20, family = "roboto"),
+        axis.text = element_text(size = 18, family = "roboto"))
+
+fig13
+
+ggsave("PAKISTAN_case_study_analysis/figures/fig13_ts_mtb_positivity_rate.png", width = 8, height = 6, units = "cm", dpi = 300)
+
+
+#Figure 14: Time Series of genX machines ---------------------------------------------------
+#time series: xpert_machines
+
+#plot time series of both public and private mtb positivity rate
+fig14 <- ggplot(PAKts, aes(x = year)) +
+  geom_line(aes(y = xpert_machines), color ="#2c4fab", size = 0.5) +
+  geom_point(aes(y = xpert_machines), color = "#2c4fab", size = 1) +
+  
+  # Ensure x-axis is rounded & shows all years
+  scale_x_continuous(name = NULL, 
+                     limits = c(2011, max(PAKts$year)),  # Start at first data year
+                     breaks = seq(2011, max(PAKts$year), 1),  # Show all years
+                     expand = c(0, 0)) +  # Remove extra padding
+
+  # Y-axis adjustments
+  scale_y_continuous(name = "GenX Machines", 
+                     limits = c(0, 500),  # Adjust based on your max value
+                     breaks = seq(0, 500, 100)) +  # Set intervals in thousands
+  
+  # Titles and styling
+  labs(title = "Time Series of GenX Machines Available in Pakistan")+ 
+  theme_dspp_ts() +
+  theme(plot.title = element_text(size = 20, family = "roboto"),
+        axis.title = element_text(size = 20, family = "roboto"),
+        axis.text = element_text(size = 18, family = "roboto"),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+
+fig14
+
+ggsave("PAKISTAN_case_study_analysis/figures/fig14_ts_genxmachines.png", width = 8, height = 6, units = "cm", dpi = 300)
+
+
+#Figure 15: Time Series of genX utilisation rate ---------------------------------------------------
+  
+fig15 <- ggplot(PAKprov_ts, aes(x = year, y = tests_per_site, color = province)) +
+    geom_line(size = 0.5) +  # One line per province
+    geom_point(size = 1) +  # Add markers for each point
+  
+    scale_color_brewer(palette = "Pastel1", name = "Province") +
+    
+    # Ensure x-axis is rounded & shows all years
+    scale_x_continuous(name = NULL, 
+                       limits = c(2016, max(PAKprov_ts$year)),  # Start at first data year
+                       breaks = seq(2016, max(PAKprov_ts$year), 1),  # Show all years
+                       expand = c(0, 0)) +
+    
+    # Y-axis adjustments
+  scale_y_continuous(name = "Average Total Tests By GenX Site",
+                     limits = c(0, 1500),  # Set a limit slightly above the 3rd quartile for better visualization
+                     breaks = seq(0, 1500, 300),  # Breaks every 300 tests
+                     labels = scales::label_comma())  + # No scaling; display as raw numbers
+    
+    
+    # Titles and styling
+    labs(title = " Yearly Average Total Tests By GenX Site (Thousands)") + 
+    theme_dspp_ts() +
+    theme(plot.title = element_text(size = 20, family = "roboto"),
+          axis.title = element_text(size = 20, family = "roboto"),
+          axis.text = element_text(size = 18, family = "roboto"),
+          axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.title = element_blank(),  # Remove legend title
+          legend.text = element_text(size = 16))
+  
+fig15
+
+ggsave("PAKISTAN_case_study_analysis/figures/fig15_ts_genxmachines_prov.png", width = 12, height = 8, units = "cm", dpi = 300)
+
