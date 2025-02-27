@@ -3,7 +3,7 @@
 Data Science for Public Policy, LSE 2024/2025
 
 
-Authors:
+**Authors:**
 - Camelia Abdelgelil (c.abdelgelil@lse.ac.uk)
 - Yara Miranda Antoniassi (y.antoniassi@lse.ac.uk)
 - Bruno Chereque Lizarzaburu (b.f.chereque-lizarzaburu@lse.ac.uk)
