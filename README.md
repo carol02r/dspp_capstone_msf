@@ -1,6 +1,6 @@
 # Capstone Project with Médecins Sans Frontières
 
-Data Science for Public Policy 2024/2025
+Data Science for Public Policy, LSE 2024/2025
 
 
 Authors:
